@@ -28,3 +28,10 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+
+src/api/graphql/models/**/*.ts
+src/views/models/**/*.tsx
+src/generated/**
+src/graphql/generated/**
+prisma/migrations/**
