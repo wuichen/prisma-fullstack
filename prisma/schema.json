@@ -10,7 +10,7 @@
       "delete": true,
       "fields": [
         {
-          "id": "RoleSchema.id",
+          "id": "Role Schema.id",
           "name": "id",
           "type": "Int",
           "isId": true,
@@ -29,7 +29,7 @@
           "order": -1
         },
         {
-          "id": "RoleSchema.name",
+          "id": "Role Schema.name",
           "name": "name",
           "type": "String",
           "isId": false,
@@ -48,7 +48,7 @@
           "order": -1
         },
         {
-          "id": "RoleSchema.json",
+          "id": "Role Schema.json",
           "name": "json",
           "type": "String",
           "isId": false,

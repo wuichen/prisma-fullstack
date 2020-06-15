@@ -7,19 +7,22 @@ import {
 } from '@nexus/schema';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
+import RoleSchemaAdapter from './adapter/roleSchema'
+
 
 export function adminNexusSettings(path = 'prisma/schema.json') {
-  const adapter = new FileSync<{
-    [key: string]: { [key: string]: { [key: string]: any }[] }[];
-  }>(path);
-  const db = low(adapter);
+  // const adapter = new FileSync<{
+  //   [key: string]: { [key: string]: { [key: string]: any }[] }[];
+  // }>(path);
   return {
     SchemaQueries: extendType({
       type: 'Query',
       definition(t) {
         t.field('getSchema', {
           type: 'Schema',
-          resolve: async () => {
+          resolve: async (_parent, { }, { prisma }) => {
+            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+            const db = await low(adapter);
             return db.value();
           },
         });
@@ -34,7 +37,9 @@ export function adminNexusSettings(path = 'prisma/schema.json') {
             id: stringArg({ nullable: false }),
             data: 'UpdateModelInput',
           },
-          resolve: async (_, { id, data }) => {
+          resolve: async (_, { id, data }, { prisma }) => {
+            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+            const db = await low(adapter);
             return db.get('models').find({ id }).assign(data).write();
           },
         });
@@ -45,7 +50,9 @@ export function adminNexusSettings(path = 'prisma/schema.json') {
             modelId: stringArg({ nullable: false }),
             data: 'UpdateFieldInput',
           },
-          resolve: async (_, { id, modelId, data }) => {
+          resolve: async (_, { id, modelId, data }, { prisma }) => {
+            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+            const db = await low(adapter);
             return db
               .get('models')
               .find({ id: modelId })

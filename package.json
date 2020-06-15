@@ -2,6 +2,7 @@
   "name": "api-routes-graphql",
   "version": "1.0.0",
   "scripts": {
+    "setup": "yarn create-migration && yarn migrate-database && yarn generate && yarn create:adminSchema",
     "dev": "next",
     "build": "next build",
     "start": "next start -p $PORT",
@@ -11,6 +12,7 @@
     "generate:nexus": "ts-node --transpile-only -P nexus.tsconfig.json src/api/schema",
     "generate:admin": "ts-node --transpile-only -P nexus.tsconfig.json scripts/generateAdmin",
     "generate:graphql": "graphql-codegen --config codegen.yml",
+    "create:adminSchema": "ts-node --transpile-only -P nexus.tsconfig.json scripts/createAdminSchema",
     "db-start": "docker-compose up -d",
     "db-stop": "docker-compose down",
     "create-migration": "prisma migrate save --experimental",
