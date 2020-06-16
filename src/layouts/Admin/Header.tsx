@@ -1,10 +1,20 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
 import styled, { DefaultTheme } from 'styled-components';
-import { Actions, Select, LayoutHeader, User, breakpointDown, EvaIcon } from 'oah-ui';
+import {
+  Actions,
+  Select,
+  LayoutHeader,
+  User,
+  breakpointDown,
+  EvaIcon,
+} from 'oah-ui';
 import { LayoutContext } from './index';
-import { useApolloClient } from '@apollo/client';
-import { useLogoutMutation } from 'generated';
+// import { useApolloClient } from '@apollo/client';
+// import { useLogoutMutation } from 'generated';
+import { LogoutDocument } from 'generated';
+import request from 'graphql-request';
+import { print } from 'graphql/language/printer';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -44,12 +54,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = (props) => {
   const { me, refetch } = useContext(LayoutContext);
-  const [logoutMutation] = useLogoutMutation();
-  const client = useApolloClient();
+  // const [logoutMutation] = useLogoutMutation();
+  // const client = useApolloClient();
 
   const logout = async () => {
-    await logoutMutation();
-    await client.clearStore();
+    await request('http://localhost:3000/api/graphql', print(LogoutDocument));
+    // await logoutMutation();
+    // await client.clearStore();
     refetch && (await refetch());
   };
 
@@ -117,9 +128,13 @@ const Header: React.FC<HeaderProps> = (props) => {
                   isSearchable={false}
                   shape="SemiRound"
                   placeholder="Themes"
-                  value={themeOptions.find((item) => item.value === props.theme)}
+                  value={themeOptions.find(
+                    (item) => item.value === props.theme
+                  )}
                   options={themeOptions}
-                  onChange={({ value }: { value: DefaultTheme['name'] }) => props.changeTheme(value)}
+                  onChange={({ value }: { value: DefaultTheme['name'] }) =>
+                    props.changeTheme(value)
+                  }
                 />
               ),
             },
@@ -131,17 +146,25 @@ const Header: React.FC<HeaderProps> = (props) => {
           actions={[
             {
               icon: 'github',
-              url: { href: 'https://github.com/AhmedElywa/prisma-admin', target: '_blank' },
+              url: {
+                href: 'https://github.com/AhmedElywa/prisma-admin',
+                target: '_blank',
+              },
             },
             {
               icon: 'twitter',
               url: { href: 'https://twitter.com/AhmedElywh', target: '_blank' },
             },
             {
-              content: me && <User name={me.name!} title="Manager" size="Medium" />,
+              content: me && (
+                <User name={me.name!} title="Manager" size="Medium" />
+              ),
             },
             {
-              icon: { name: 'log-out-outline', options: { animation: { type: 'zoom' } } },
+              icon: {
+                name: 'log-out-outline',
+                options: { animation: { type: 'zoom' } },
+              },
               url: {
                 onClick: logout,
                 title: 'Log out',
