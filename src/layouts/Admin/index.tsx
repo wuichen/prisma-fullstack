@@ -85,14 +85,6 @@ const LayoutPage: React.FC = ({ children }) => {
     }
   }, [schemaData]);
 
-  useEffect(() => {
-    if (!loading && !userData?.me && !authLayout) {
-      router.push('/admin/auth/login');
-    } else if (authLayout && userData?.me && !loading) {
-      router.push('/admin');
-    }
-  }, [loading, userData]);
-
   return (
     <ThemeProvider theme={themes(theme)}>
       {loading ? (

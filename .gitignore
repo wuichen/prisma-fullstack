@@ -35,3 +35,4 @@ src/views/models/**/*.tsx
 src/generated/**
 src/graphql/generated/**
 prisma/migrations/**
+.vercel
