@@ -23,17 +23,12 @@ import { MeQuery, MeQueryVariables, useMeQuery } from '../../generated';
 import { ApolloQueryResult } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useSWR from 'swr';
-import { MeDocument } from 'generated';
-import { print } from 'graphql/language/printer';
-import request from 'graphql-request';
 
 interface ContextProps {
   me?: MeQuery['me'] | null;
-  // refetch?: (
-  //   variables?: MeQueryVariables | undefined
-  // ) => Promise<ApolloQueryResult<MeQuery>>;
-  refetch?: (variables?: MeQueryVariables | undefined) => Promise<any>;
+  refetch?: (
+    variables?: MeQueryVariables | undefined
+  ) => Promise<ApolloQueryResult<MeQuery>>;
   children?: React.ReactNode;
 }
 
@@ -47,12 +42,7 @@ const LayoutPage: React.FC = ({ children }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('dark');
   const sidebarRef = useRef<SidebarRefObject>(null);
   const menuRef = useRef<MenuRefObject>(null);
-  const { data: userData, error, revalidate } = useSWR(
-    print(MeDocument),
-    (query) => request('http://localhost:3000/api/graphql')
-  );
-
-  // const { data: userData, loading, refetch } = useMeQuery();
+  const { data: userData, loading, refetch } = useMeQuery();
   const router = useRouter();
 
   const changeTheme = (newTheme: DefaultTheme['name']) => {
@@ -63,23 +53,22 @@ const LayoutPage: React.FC = ({ children }) => {
   const adminLayout = router.pathname.startsWith('/admin');
 
   useEffect(() => {
-    if (!error && userData && !userData.me && !authLayout) {
+    if (!loading && !userData?.me && !authLayout) {
       router.push('/admin/auth/login');
+    } else if (authLayout && userData?.me && !loading) {
+      router.push('/admin');
     }
-    // else if (authLayout && data?.me) {
-    //   router.push('/admin');
-    // }
-  }, [userData, error]);
+  }, [loading, userData]);
 
   return (
     <ThemeProvider theme={themes(theme)}>
-      {!userData && !error ? (
+      {loading ? (
         <Spinner size="Giant" status="Primary" />
       ) : (
         <LayoutContext.Provider
           value={{
             me: userData?.me,
-            refetch: revalidate,
+            refetch,
           }}
         >
           <SimpleLayout />

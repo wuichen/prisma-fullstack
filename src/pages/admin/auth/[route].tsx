@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { withApollo } from 'api/client';
+import Layout from 'layouts/Admin';
 
 const Route: React.FC = () => {
   const {
@@ -29,7 +30,11 @@ const Route: React.FC = () => {
     default:
       break;
   }
-  return <View />;
+  return (
+    <Layout>
+      <View />
+    </Layout>
+  );
 };
 
 export default withApollo(Route);
