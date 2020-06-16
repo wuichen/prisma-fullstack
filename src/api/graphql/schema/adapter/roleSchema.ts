@@ -1,4 +1,4 @@
-import Base from './Base'
+import Base from './base'
 
 // Same code as in FileAsync, minus `await`
 class RoleSchema extends Base {

@@ -2,7 +2,7 @@
   "name": "api-routes-graphql",
   "version": "1.0.0",
   "scripts": {
-    "setup": "yarn create-migration && yarn migrate-database && yarn generate && yarn create:adminSchema",
+    "setup": "yarn create-migration && yarn migrate-database && yarn generate",
     "dev": "next",
     "build": "next build",
     "start": "next start -p $PORT",
