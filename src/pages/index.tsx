@@ -121,8 +121,8 @@ function HomePage({ deviceType, platform }) {
   );
 }
 
-const IndexPage = ({ deviceType }) => {
-  const [page, setPage] = useState(null);
+const IndexPage = ({ deviceType, sub }) => {
+  const [page, setPage] = useState(sub);
   useEffect(() => {
     const { host } = window.location;
     let isDev = host.includes('localhost');
@@ -132,17 +132,34 @@ const IndexPage = ({ deviceType }) => {
       (isDev && splitHost.length === 2)
     ) {
       let page = splitHost[0];
-      if (page !== 'www') {
+      if (page && page !== 'www') {
         setPage(page);
       }
     }
-    setPage('grocery');
   });
   if (page) {
     return <HomePage platform={page} deviceType={deviceType} />;
   } else {
     return <div>loading</div>;
   }
+};
+
+IndexPage.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
+  let host;
+  let sub = 'www';
+  if (req && req.headers.host) {
+    host = req.headers.host;
+  }
+  if (host) {
+    sub = host.split('mercy-app')[0];
+    if (sub) {
+      sub = sub.split('.')[0];
+    } else {
+      sub = 'www';
+    }
+  }
+  return { sub };
 };
 
 export default withApollo(IndexPage);

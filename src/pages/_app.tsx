@@ -67,7 +67,11 @@ export default function ExtendedApp({ Component, pageProps }) {
                 <AuthProvider>
                   <>
                     <AppLayout
-                      deviceType={deviceType ? deviceType : { dektop: true }}
+                      deviceType={
+                        deviceType
+                          ? deviceType
+                          : { mobile: false, tablet: false, desktop: true }
+                      }
                     >
                       <Component
                         {...pageProps}
