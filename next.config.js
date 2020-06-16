@@ -1,4 +1,8 @@
-module.exports = {
+const { withPlugins } = require('next-compose-plugins');
+const withOptimizedImages = require('next-optimized-images');
+
+// next.js configuration
+const nextConfig = {
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -9,4 +13,18 @@ module.exports = {
   serverRuntimeConfig: {
     JWT_SECRET: 'changeMe',
   },
+  env: {
+    STRIPE_PUBLIC_KEY: 'put_your_stripe_public_key_here',
+    API_URL: 'http://localhost:4000/shop/graphql',
+  },
+  webpack: (config) => {
+    config.resolve.modules.push(__dirname);
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+    };
+    return config;
+  },
 };
+
+module.exports = withPlugins([withOptimizedImages], nextConfig);
