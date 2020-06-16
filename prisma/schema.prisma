@@ -1,60 +1,340 @@
-datasource postgresql {
-  url      = env("DATABASE_URL")
+datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model RoleSchema {
+model Page {
   id   Int    @default(autoincrement()) @id
-  name String @unique
-  json String
+  slug String @unique
+}
+
+model Address {
+  id        Int      @default(autoincrement()) @id
+  type      String
+  name      String
+  json      String?
+  info      String
+  companyId Int?
+  company   Company?
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  // @onDelete(SET_NULL)
+  orders    Order[]
+}
+
+model Role {
+  id     Int     @default(autoincrement()) @id
+  name   String  @unique
+  Staff  Staff[]
+  schema String
+}
+
+model Staff {
+  id        Int      @default(autoincrement()) @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId Int
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+  firstName String?
+  lastName  String?
+  contact   Contact? @relation(fields: [contactId], references: [id])
+  contactId Int?
+  email     String?
+}
+
+model Card {
+  id            Int     @default(autoincrement()) @id
+  type          String
+  cardType      String
+  name          String
+  lastFourDigit Int
+  userId        String?
+  user          User?   @relation(fields: [userId], references: [id])
+}
+
+model Contact {
+  id        Int      @default(autoincrement()) @id
+  type      String?
+  number    String
+  companyId Int?
+  company   Company?
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  // @onDelete(SET_NULL)
+  orders    Order[]
+  // @onDelete(SET_NULL)
+  staffs    Staff[]
+}
+
+model Company {
+  id               Int            @default(autoincrement()) @id
+  slug             String         @unique
+  name             String
+  description      String
+  previewUrl       String?
+  thumbnailUrl     String?
+  platformSlug     String
+  address          Address?       @relation(fields: [addressId], references: [id])
+  addressId        Int?
+  contact          Contact?       @relation(fields: [contactId], references: [id])
+  contactId        Int?
+  platformId       Int
+  platform         Platform       @relation(fields: [platformId], references: [id])
+  // @onDelete(CASCADE)
+  products         Product[]
+  // @onDelete(CASCADE)
+  customers        Customer[]
+  // @onDelete(SET_NULL)
+  orders           Order[]
+  owner            User?          @relation(fields: [ownerId], references: [id])
+  ownerId          String?
+  // @onDelete(SET_NULL)
+  invoices         Invoice[]
+  reviews          Review[]
+  staffs           Staff[]
+  deliveryDetail   DeliveryDetail @relation(fields: [deliveryDetailId], references: [id])
+  deliveryDetailId Int
+  promotion        String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  categories       Category[]     @relation(references: [id])
+}
+
+model DeliveryDetail {
+  id           Int      @default(autoincrement()) @id
+  isFree       Boolean
+  charge       String
+  minimumOrder Float
+  companyId    Int?
+  company      Company?
+}
+
+model Coupon {
+  id                 Int    @default(autoincrement()) @id
+  name               String
+  code               String
+  image              String
+  discountInPercent  Int    @default(0)
+  numberOfCoupon     Int    @default(0)
+  numberOfUsedCoupon Int    @default(0)
+}
+
+model Country {
+  id        Int        @default(autoincrement()) @id
+  code      Int        @unique
+  name      String
+  currency  String
+  // @onDelete(SET_NULL)
+  platforms Platform[]
+
+}
+
+model Platform {
+  id           Int        @default(autoincrement()) @id
+  name         String?
+  bannerImg    String?
+  slug         String     @unique
+  ownerId      String
+  owner        User       @relation(fields: [ownerId], references: [id])
+  description  String?
+  // @onDelete(SET_NULL)
+  companies    Company[]
+  // @onDelete(SET_NULL)
+  categories   Category[]
+  platformType String?
+  countryId    Int?
+  country      Country?   @relation(fields: [countryId], references: [id])
+  taxRate      Float
+  createdAt    DateTime   @default(now())
 }
 
 model User {
-  id        Int       @default(autoincrement()) @id
-  createdAt DateTime  @default(now())
-  email     String    @unique
+  id                 String     @default(cuid()) @id
+  createdAt          DateTime   @default(now())
+  email              String     @unique
+  firstName          String?
+  lastName           String?
+  token              String?
+  googleId           String?
+  walletId           String?
+  password           String?
+  income             Float?
+  username           String?    @unique
+  image              String?
+  imagePublicId      String?
+  coverImage         String?
+  coverImagePublicId String?
+  isOnline           Boolean    @default(false)
+  // @onDelete(SET_NULL)
+  companies          Company[]
+  // @onDelete(SET_NULL)
+  platforms          Platform[]
+  // @onDelete(SET_NULL)
+  addresses          Address[]
+  // @onDelete(CASCADE)
+  cards              Card[]
+  // @onDelete(SET_NULL)
+  contacts           Contact[]
+  // @onDelete(SET_NULL)
+  customers          Customer[]
+  staffs             Staff[]
+}
+
+model Customer {
+  id             Int       @default(autoincrement()) @id
+  firstName      String
+  lastName       String
+  email          String
+  address        String?
+  zipcode        String?
+  city           String?
+  avatar         String?
+  birthday       DateTime?
+  firstSeen      DateTime? @default(now())
+  lastSeen       DateTime? @default(now())
+  hasOrdered     Boolean?  @default(false)
+  latestPurchase DateTime?
+  hasNewsLetter  Boolean?  @default(false)
+  groups         String[]
+  nbOrders       Int?
+  // @onDelete(CASACADE)
+  reviews        Review[]
+  // @onDelete(SET_NULL)
+  invoices       Invoice[]
+  orders         Order[]
+  company        Company?  @relation(fields: [companyId], references: [id])
+  companyId      Int?
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  image          String?
+  totalOrder     Int       @default(0)
+  totalSpent     Float?    @default(0)
+  createdAt      DateTime  @default(now())
+}
+
+model Category {
+  id         Int        @default(autoincrement()) @id
+  name       String
+  // @onDelete(SET_NULL)
+  products   Product[]
+  platform   Platform   @relation(fields: [platformId], references: [id])
+  platformId Int
+  slug       String     @unique
+  type       String
+  icon       String?
+  parentId   Int?
+  parent     Category?  @relation("Children", fields: [parentId], references: [id])
+  // @onDelete(SET_NULL)
+  children   Category[] @relation("Children")
+  companies  Company[]
+}
+
+model Product {
+  id                Int         @default(autoincrement()) @id
+  width             Float?
+  height            Float?
+  price             Float?
+  thumbnail         String?
+  image             String?
+  description       String?
+  stock             Int?
+  // @onDelete(CASCADE)
+  review            Review[]
+  // @onDelete(SET_NULL)
+  orderItems        OrderItem[]
+  company           Company?    @relation(fields: [companyId], references: [id])
+  companyId         Int?
+  sku               String?
+  name              String?
+  slug              String      @unique
+  salePrice         Float?
+  discountInPercent Int?
+  type              String
+  gallery           String[]
+  // @onDelete(SET_NULL)
+  categories        Category[]
+  unit              String?
+  createdAt         DateTime    @default(now())
+
+}
+
+model OrderItem {
+  id        Int     @default(autoincrement()) @id
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  quantity  Int
   name      String?
-  password  String
-  // @onDelete(CASCADE)
-  posts     Post[]
-  group     Group?    @relation(fields: [groupId], references: [id])
-  groupId   Int?
+  weight    String?
+  price     Float
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  image     String?
+}
+
+model Order {
+  id                Int         @default(autoincrement()) @id
+  reference         String?
+  customerId        Int?
+  customer          Customer?   @relation(fields: [customerId], references: [id])
+  subtotal          Float
+  deliveryFees      Float
+  taxRate           Float
+  taxes             Float
+  total             Float
+  status            String?
+  returned          Boolean     @default(false)
   // @onDelete(SET_NULL)
-  comments  Comment[]
-}
-
-model Post {
-  id        Int       @default(autoincrement()) @id
-  published Boolean   @default(false)
-  title     String
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  Int?
-  // @onDelete(CASCADE)
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model Comment {
-  id        Int      @default(autoincrement()) @id
-  contain   String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Group {
-  id        Int      @default(autoincrement()) @id
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  invoice           Invoice[]
   // @onDelete(SET_NULL)
-  users     User[]
+  reviews           Review[]
+  // @onDelete(SET_NULL)
+  orderItems        OrderItem[]
+  company           Company?    @relation(fields: [companyId], references: [id])
+  companyId         Int?
+  deliveryTime      DateTime?
+  createdAt         DateTime    @default(now())
+  paymentMethod     String
+  deliveryAdress    Address     @relation(fields: [deliveryAddressId], references: [id])
+  deliveryAddressId Int
+  contact           Contact?    @relation(fields: [contactId], references: [id])
+  contactId         Int?
+}
+
+model Invoice {
+  id           Int      @default(autoincrement()) @id
+  createdAt    DateTime @default(now())
+  orderId      Int
+  order        Order    @relation(fields: [orderId], references: [id])
+  customerId   Int
+  customer     Customer @relation(fields: [customerId], references: [id])
+  subtotal     Float?
+  deliveryFees Float?
+  taxRate      Float?
+  taxes        Float?
+  total        Float?
+  company      Company? @relation(fields: [companyId], references: [id])
+  companyId    Int?
+}
+
+model Review {
+  id         Int       @default(autoincrement()) @id
+  createdAt  DateTime? @default(now())
+  status     String?
+  orderId    Int?
+  order      Order?    @relation(fields: [orderId], references: [id])
+  productId  Int?
+  product    Product?  @relation(fields: [productId], references: [id])
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  rating     Int?
+  comment    String?
+  company    Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
 }

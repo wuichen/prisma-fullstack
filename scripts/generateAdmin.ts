@@ -3,9 +3,9 @@ import { buildSettingsSchema, generatePages, generateGraphql } from '@prisma-too
 
 const pageContent = `
 import React from 'react';
-import PrismaTable from 'components/PrismaTable';
+import PrismaController from 'components/PrismaController';
 const #{id}: React.FC = () => {
-  return <PrismaTable model="#{id}" />;
+  return <PrismaController model="#{id}" />;
 };
 export default #{id};
 `;

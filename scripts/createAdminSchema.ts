@@ -8,10 +8,10 @@ async function createAdminSchema() {
   const rawData = fs.readFileSync(path.join(__dirname, '../prisma/schema.json'));
   const schemaString = JSON.stringify(JSON.parse(rawData))
   await prisma.connect();
-  await prisma.roleSchema.create({
+  await prisma.role.create({
     data: {
       name: 'admin',
-      json: schemaString
+      schema: schemaString
     }
   })
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { PrismaTable } from '@prisma-tools/admin';
+import { PrismaTable } from './PrismaTable';
 
 const Table: React.FC<{ model: string }> = ({ model }) => {
   const router = useRouter();

@@ -23,7 +23,10 @@ import { MeQuery, MeQueryVariables, useMeQuery } from '../../generated';
 import { ApolloQueryResult } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
+import useSWR from 'swr';
+import { GetSchemaDocument } from 'generated';
+import { print } from 'graphql/language/printer';
+import request from 'graphql-request';
 interface ContextProps {
   me?: MeQuery['me'] | null;
   refetch?: (
@@ -42,6 +45,7 @@ const LayoutPage: React.FC = ({ children }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('dark');
   const sidebarRef = useRef<SidebarRefObject>(null);
   const menuRef = useRef<MenuRefObject>(null);
+  const [menu, setMenu] = useState([]);
   const { data: userData, loading, refetch } = useMeQuery();
   const router = useRouter();
 
@@ -51,6 +55,35 @@ const LayoutPage: React.FC = ({ children }) => {
 
   const authLayout = router.pathname.startsWith('/admin/auth');
   const adminLayout = router.pathname.startsWith('/admin');
+
+  const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
+    request('http://localhost:3000/api/graphql', query)
+  );
+
+  useEffect(() => {
+    if (
+      schemaData &&
+      schemaData.getSchema &&
+      schemaData.getSchema.models &&
+      schemaData.getSchema.models.length > 0
+    ) {
+      setMenu([
+        ...menuItems,
+        {
+          title: 'Models',
+          icon: { name: 'layers-outline' },
+          children: schemaData.getSchema.models.map((model) => {
+            return {
+              title: model.name,
+              link: {
+                href: `/admin/models/${model.name}`,
+              },
+            };
+          }),
+        },
+      ]);
+    }
+  }, [schemaData]);
 
   useEffect(() => {
     if (!loading && !userData?.me && !authLayout) {
@@ -81,7 +114,7 @@ const LayoutPage: React.FC = ({ children }) => {
               />
             )}
             <LayoutContainer>
-              {!authLayout && adminLayout && (
+              {!authLayout && adminLayout && menu && menu.length > 0 && (
                 <Sidebar
                   ref={sidebarRef}
                   property="start"
@@ -95,7 +128,7 @@ const LayoutPage: React.FC = ({ children }) => {
                       className="sidebar-menu"
                       Link={Link}
                       ref={menuRef}
-                      items={menuItems}
+                      items={menu}
                       currentPath={router.pathname}
                       toggleSidebar={() => sidebarRef.current?.hide()}
                     />

@@ -38,7 +38,7 @@ export const AuthMutations = extendType({
         const hashedPassword = await hash(password, 10)
         const user = await ctx.prisma.user.create({
           data: {
-            name,
+            username: name,
             email,
             password: hashedPassword,
           },
