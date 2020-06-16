@@ -25,7 +25,7 @@ import {
 import OFFERS from 'data/offers';
 import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
-
+import { useFindOnePlatformQuery } from 'generated';
 // export default function Index() {
 //   const { data, error } = useSWR(print(FindManyUserDocument), (query) =>
 //     request('http://localhost:3000/api/graphql', query, {
@@ -68,14 +68,14 @@ function HomePage({ deviceType, platform }) {
         <Banner
           intlTitleId="groceriesTitle"
           intlDescriptionId="groceriesSubTitle"
-          imageUrl={BannerImg}
+          imageUrl={platform.bannerImg}
         />
 
         {deviceType.desktop ? (
           <>
             <MobileCarouselDropdown>
               <StoreNav items={storeType} />
-              <Sidebar type={platform} deviceType={deviceType} />
+              <Sidebar type={platform.slug} deviceType={deviceType} />
             </MobileCarouselDropdown>
             <OfferSection>
               <div style={{ margin: '0 -10px' }}>
@@ -84,12 +84,12 @@ function HomePage({ deviceType, platform }) {
             </OfferSection>
             <MainContentArea>
               <SidebarSection>
-                <Sidebar type={platform} deviceType={deviceType} />
+                <Sidebar type={platform.slug} deviceType={deviceType} />
               </SidebarSection>
               <ContentSection>
                 <div ref={targetRef}>
                   <Products
-                    type={platform}
+                    type={platform.slug}
                     deviceType={deviceType}
                     fetchLimit={16}
                   />
@@ -100,7 +100,7 @@ function HomePage({ deviceType, platform }) {
         ) : (
           <MainContentArea>
             <StoreNav items={storeType} />
-            <Sidebar type={platform} deviceType={deviceType} />
+            <Sidebar type={platform.slug} deviceType={deviceType} />
             <OfferSection>
               <div style={{ margin: '0 -10px' }}>
                 <Carousel deviceType={deviceType} data={OFFERS} />
@@ -108,7 +108,7 @@ function HomePage({ deviceType, platform }) {
             </OfferSection>
             <ContentSection style={{ width: '100%' }}>
               <Products
-                type={platform}
+                type={platform.slug}
                 deviceType={deviceType}
                 fetchLimit={16}
               />
@@ -122,26 +122,37 @@ function HomePage({ deviceType, platform }) {
 }
 
 const IndexPage = ({ deviceType, sub }) => {
-  const [page, setPage] = useState(sub);
-  useEffect(() => {
-    const { host } = window.location;
-    let isDev = host.includes('localhost');
-    let splitHost = host.split('.');
-    if (
-      (!isDev && splitHost.length === 3) ||
-      (isDev && splitHost.length === 2)
-    ) {
-      let page = splitHost[0];
-      if (page && page !== 'www') {
-        setPage(page);
-      }
-    }
+  const router = useRouter();
+  const { data, loading, error } = useFindOnePlatformQuery({
+    variables: {
+      where: {
+        slug: sub,
+      },
+    },
+    skip: !sub,
   });
-  if (page) {
-    return <HomePage platform={page} deviceType={deviceType} />;
-  } else {
-    return <div>loading</div>;
+  // useEffect(() => {
+  //   const { host } = window.location;
+  //   let isDev = host.includes('localhost');
+  //   let splitHost = host.split('.');
+  //   if (
+  //     (!isDev && splitHost.length === 3) ||
+  //     (isDev && splitHost.length === 2)
+  //   ) {
+  //     let page = splitHost[0];
+  //     if (page && page !== 'www') {
+  //       setPage(page);
+  //     }
+  //   }
+  // });
+  if (error) {
+    router.push('https://www.mercy-app.com');
   }
+
+  if (data && data.findOnePlatform) {
+    return <HomePage platform={data.findOnePlatform} deviceType={deviceType} />;
+  }
+  return <div>loading</div>;
 };
 
 IndexPage.getInitialProps = async (ctx: any) => {
@@ -150,6 +161,9 @@ IndexPage.getInitialProps = async (ctx: any) => {
   let sub = 'www';
   if (req && req.headers.host) {
     host = req.headers.host;
+  }
+  if (host.includes('localhost')) {
+    return { sub: 'furniture' };
   }
   if (host) {
     sub = host.split('mercy-app')[0];
