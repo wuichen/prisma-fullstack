@@ -5,7 +5,8 @@ import { NextPage } from 'next';
 
 import 'react-quill/dist/quill.snow.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { withApollo } from 'api/client';
+import Layout from 'layouts/Admin';
 const MyApp: NextPage<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
@@ -17,9 +18,11 @@ const MyApp: NextPage<AppProps> = ({ Component, pageProps }) => {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 };
 
-export default MyApp;
+export default withApollo(MyApp);
