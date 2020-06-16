@@ -57,7 +57,7 @@ const LayoutPage: React.FC = ({ children }) => {
   const adminLayout = router.pathname.startsWith('/admin');
 
   const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
-    request('http://localhost:3000/api/graphql', query)
+    request(process.env.API_URL, query)
   );
 
   useEffect(() => {

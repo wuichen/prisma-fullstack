@@ -1,10 +1,12 @@
 {
   "build": {
     "env": {
+      "API_URL": "https://www.mercy-app.com/api/graphql",
       "DATABASE_URL": "postgres://mpidgufy:H6B2LahLLs0NJEL4wzxdmAkq2_IVbQ3V@arjuna.db.elephantsql.com:5432/mpidgufy"
     }
   },
   "env": {
+    "API_URL": "https://www.mercy-app.com/api/graphql",
     "DATABASE_URL": "postgres://mpidgufy:H6B2LahLLs0NJEL4wzxdmAkq2_IVbQ3V@arjuna.db.elephantsql.com:5432/mpidgufy"
   }
 }
