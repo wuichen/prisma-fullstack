@@ -74,46 +74,36 @@ model Contact {
 }
 
 model Company {
-  id               Int            @default(autoincrement()) @id
-  slug             String         @unique
-  name             String
-  description      String
-  previewUrl       String?
-  thumbnailUrl     String?
-  platformSlug     String
-  address          Address?       @relation(fields: [addressId], references: [id])
-  addressId        Int?
-  contact          Contact?       @relation(fields: [contactId], references: [id])
-  contactId        Int?
-  platformId       Int
-  platform         Platform       @relation(fields: [platformId], references: [id])
+  id             Int        @default(autoincrement()) @id
+  slug           String     @unique
+  name           String
+  description    String
+  previewUrl     String?
+  thumbnailUrl   String?
+  platformSlug   String
+  address        Address?   @relation(fields: [addressId], references: [id])
+  addressId      Int?
+  contact        Contact?   @relation(fields: [contactId], references: [id])
+  contactId      Int?
+  platformId     Int
+  platform       Platform   @relation(fields: [platformId], references: [id])
   // @onDelete(CASCADE)
-  products         Product[]
+  products       Product[]
   // @onDelete(CASCADE)
-  customers        Customer[]
+  customers      Customer[]
   // @onDelete(SET_NULL)
-  orders           Order[]
-  owner            User?          @relation(fields: [ownerId], references: [id])
-  ownerId          String?
+  orders         Order[]
+  owner          User?      @relation(fields: [ownerId], references: [id])
+  ownerId        String?
   // @onDelete(SET_NULL)
-  invoices         Invoice[]
-  reviews          Review[]
-  staffs           Staff[]
-  deliveryDetail   DeliveryDetail @relation(fields: [deliveryDetailId], references: [id])
-  deliveryDetailId Int
-  promotion        String?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  categories       Category[]     @relation(references: [id])
-}
-
-model DeliveryDetail {
-  id           Int      @default(autoincrement()) @id
-  isFree       Boolean
-  charge       String
-  minimumOrder Float
-  companyId    Int?
-  company      Company?
+  invoices       Invoice[]
+  reviews        Review[]
+  staffs         Staff[]
+  deliveryDetail String
+  promotion      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  categories     Category[] @relation(references: [id])
 }
 
 model Coupon {
