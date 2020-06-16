@@ -1,65 +1,97 @@
 import React from 'react';
-import App from 'next/app';
-import { ThemeProvider } from 'styled-components';
-import { theme } from 'theme';
-import { AuthProvider } from 'contexts/auth/auth.provider';
-import { StickyProvider } from 'contexts/app/app.provider';
-import { SearchProvider } from 'contexts/search/search.provider';
-import { HeaderProvider } from 'contexts/header/header.provider';
-import { LanguageProvider } from 'contexts/language/language.provider';
+import ShopApp from 'layouts/Shop/App';
+import styled from 'styled-components';
+import { Modal } from '@redq/reuse-modal';
+import { SEO } from 'components/seo';
+import SiteFooter from 'components/SiteFooter/SiteFooter';
+import Accordion from 'components/Accordion/Accordion';
+import { FormattedMessage } from 'react-intl';
 
-import AppLayout from 'containers/LayoutContainer/AppLayout';
-import { useDeviceType } from 'helper/useDeviceType';
-import { CartProvider } from 'contexts/cart/use-cart';
-// Language translation files
-import localEn from 'data/translation/en.json';
-import localAr from 'data/translation/ar.json';
-import localEs from 'data/translation/es.json';
-import localDe from 'data/translation/de.json';
-import localCn from 'data/translation/zh.json';
-import localIl from 'data/translation/he.json';
+const accor = [
+  {
+    id: 1,
+    intlTitleId: 'faqNo1Title',
+    intlDetailsId: 'faqNo1Desc',
+    values: { number1: 7, number2: 2 },
+  },
+  {
+    id: 2,
+    intlTitleId: 'faqNo2Title',
+    intlDetailsId: 'faqNo2Desc',
+  },
+  {
+    id: 3,
+    intlTitleId: 'faqNo3Title',
+    intlDetailsId: 'faqNo3Desc',
+  },
+  {
+    id: 4,
+    intlTitleId: 'faqNo4Title',
+    intlDetailsId: 'faqNo4Desc',
+  },
+];
 
-import { GlobalStyle } from 'styled/global.style';
-import { parseCookies } from 'helper/parse-cookies';
-import HelpComponent from 'views/shop/help';
-// Language translation Config
-const messages = {
-  en: localEn,
-  ar: localAr,
-  es: localEs,
-  de: localDe,
-  zh: localCn,
-  he: localIl,
-};
-// need to provide types
-const Help = ({}) => {
-  const userAgent =
-    typeof document !== 'undefined' ? navigator.userAgent : null;
-  const locale = null;
-  const query = {};
-  const deviceType = useDeviceType(userAgent);
+const Heading = styled.h3`
+  font-size: 21px;
+  font-weight: 700;
+  color: #0d1136;
+  line-height: 1.2;
+  margin-bottom: 25px;
+  width: 100%;
+  text-align: center;
+`;
+
+const HelpPageWrapper = styled.div`
+  background-color: #f7f7f7;
+  position: relative;
+  padding: 130px 0 60px 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media (max-width: 989px) {
+    padding-top: 70px;
+  }
+`;
+
+export const HelpPageContainer = styled.div`
+  background-color: transparent;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  @media (min-width: 990px) {
+    width: 870px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 989px) {
+    padding: 30px;
+  }
+`;
+
+export default function () {
   return (
-    <ThemeProvider theme={theme}>
-      <LanguageProvider messages={messages} initLocale={locale}>
-        <CartProvider>
-          <SearchProvider query={query}>
-            <HeaderProvider>
-              <StickyProvider>
-                <AuthProvider>
-                  <>
-                    <AppLayout deviceType={deviceType}>
-                      <HelpComponent deviceType={deviceType} />
-                    </AppLayout>
-                    <GlobalStyle />
-                  </>
-                </AuthProvider>
-              </StickyProvider>
-            </HeaderProvider>
-          </SearchProvider>
-        </CartProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  );
-};
+    <ShopApp>
+      <Modal>
+        <SEO title="F.A.Q - PickBazar" description="F.A.Q Details" />
+        <HelpPageWrapper>
+          <HelpPageContainer>
+            <Heading>F.A.Q</Heading>
+            <Accordion items={accor} />
+          </HelpPageContainer>
 
-export default Help;
+          <SiteFooter style={{ marginTop: 50 }}>
+            <FormattedMessage
+              id="siteFooter"
+              defaultMessage="Pickbazar is a product of"
+            />
+            &nbsp; <a href="#">Redq, Inc.</a>
+          </SiteFooter>
+        </HelpPageWrapper>
+      </Modal>
+    </ShopApp>
+  );
+}

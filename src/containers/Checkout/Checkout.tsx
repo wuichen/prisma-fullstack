@@ -12,7 +12,7 @@ import { DELETE_ADDRESS } from 'graphql/mutation/address';
 import { DELETE_CARD } from 'graphql/mutation/card';
 import { DELETE_CONTACT } from 'graphql/mutation/contact';
 import { openModal } from '@redq/reuse-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import CheckoutWrapper, {
   CheckoutContainer,
   OrderSummary,

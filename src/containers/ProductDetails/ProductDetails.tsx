@@ -67,15 +67,15 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
 
   return (
     <>
-      <ProductDetailsWrapper className='product-card' dir='ltr'>
+      <ProductDetailsWrapper className="product-card" dir="ltr">
         {!isRtl && (
           <ProductPreview>
             <BackButton>
               <Button
-                title='Back'
-                intlButtonId='backBtn'
-                iconPosition='left'
-                size='small'
+                title="Back"
+                intlButtonId="backBtn"
+                iconPosition="left"
+                size="small"
                 style={{
                   backgroundColor: '#ffffff',
                   border: '1px solid #f1f1f1',
@@ -95,7 +95,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
 
         <ProductInfo dir={isRtl ? 'rtl' : 'ltr'}>
           <ProductTitlePriceWrapper>
-            <ProductTitle>{product.title}</ProductTitle>
+            <ProductTitle>{product.name}</ProductTitle>
             <ProductPriceWrapper>
               {product.discountInPercent ? (
                 <SalePrice>
@@ -122,11 +122,11 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
             <ProductCartBtn>
               {!isInCart(data.id) ? (
                 <Button
-                  title='Add to Cart'
-                  intlButtonId='addToCartButton'
-                  iconPosition='left'
-                  size='small'
-                  className='cart-button'
+                  title="Add to Cart"
+                  intlButtonId="addToCartButton"
+                  iconPosition="left"
+                  size="small"
+                  className="cart-button"
                   icon={<CartIcon />}
                   onClick={handleAddClick}
                 />
@@ -166,10 +166,10 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
           <ProductPreview>
             <BackButton>
               <Button
-                title='Back'
-                intlButtonId='backBtn'
-                iconPosition='left'
-                size='small'
+                title="Back"
+                intlButtonId="backBtn"
+                iconPosition="left"
+                size="small"
                 style={{
                   backgroundColor: '#ffffff',
                   border: '1px solid #f1f1f1',
@@ -191,8 +191,8 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
       <RelatedItems>
         <h2>
           <FormattedMessage
-            id='intlReletedItems'
-            defaultMessage='Related Items'
+            id="intlReletedItems"
+            defaultMessage="Related Items"
           />
         </h2>
         <Products

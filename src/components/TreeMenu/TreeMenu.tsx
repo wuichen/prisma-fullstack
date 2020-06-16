@@ -64,8 +64,8 @@ export const TreeMenu: React.FC<Props> = ({
       if (!subOption.children) {
         return (
           <Tree
-            key={subOption.title}
-            name={subOption.title}
+            key={subOption.name}
+            name={subOption.name}
             icon={subOption.icon}
             depth="child"
             onClick={() => onClick(subOption.slug)}
@@ -75,8 +75,8 @@ export const TreeMenu: React.FC<Props> = ({
       }
       return (
         <Tree
-          key={subOption.title}
-          name={subOption.title}
+          key={subOption.name}
+          name={subOption.name}
           icon={subOption.icon}
           depth="parent"
           onClick={() => onClick(subOption.slug)}

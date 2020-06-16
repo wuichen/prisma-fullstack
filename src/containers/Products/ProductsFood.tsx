@@ -10,7 +10,7 @@ import {
   LoaderItem,
   ProductCardWrapper,
 } from './Products.style';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Button from 'components/Button/Button';
 import Loader from 'components/Loader/Loader';
 import Placeholder from 'components/Placeholder/Placeholder';

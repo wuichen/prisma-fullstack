@@ -13,7 +13,7 @@ import { DELETE_ADDRESS } from 'graphql/mutation/address';
 import { DELETE_CARD } from 'graphql/mutation/card';
 import { DELETE_CONTACT } from 'graphql/mutation/contact';
 import { openModal } from '@redq/reuse-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import FormWrapper, {
   Row,
   Col,
@@ -104,20 +104,20 @@ const Checkout: React.FC<any> = () => {
           <FormTitleWrapper>
             <FormTitle>
               <FormattedMessage
-                id='reqMedicine'
-                defaultMessage='Request Medicine'
+                id="reqMedicine"
+                defaultMessage="Request Medicine"
               />
             </FormTitle>
           </FormTitleWrapper>
 
           <Heading>
-            <FormattedMessage id='noteHead' defaultMessage='Note' />
+            <FormattedMessage id="noteHead" defaultMessage="Note" />
           </Heading>
 
           <NoteText>
             <FormattedMessage
-              id='noteDescription'
-              defaultMessage='Product availability &amp; price will confirm over phone. Delivery Charge inside the city ${inside} &amp; outside the city ${outside}.'
+              id="noteDescription"
+              defaultMessage="Product availability &amp; price will confirm over phone. Delivery Charge inside the city ${inside} &amp; outside the city ${outside}."
               values={{ inside: 5, outside: 10 }}
             />
           </NoteText>
@@ -125,23 +125,23 @@ const Checkout: React.FC<any> = () => {
           <Row>
             <Col xs={12} sm={6} md={6} lg={6}>
               <Input
-                type='text'
-                label='Medicine Name'
-                value=''
+                type="text"
+                label="Medicine Name"
+                value=""
                 onUpdate={() => console.log('hello')}
                 style={{ backgroundColor: '#F7F7F7' }}
-                intlInputLabelId='rmMedicineName'
+                intlInputLabelId="rmMedicineName"
               />
             </Col>
 
             <Col xs={12} sm={6} md={6} lg={6}>
               <Input
-                type='text'
-                label='Quantity'
-                value=''
+                type="text"
+                label="Quantity"
+                value=""
                 onUpdate={() => console.log('hello')}
                 style={{ backgroundColor: '#F7F7F7' }}
-                intlInputLabelId='rmMedicineQuantity'
+                intlInputLabelId="rmMedicineQuantity"
               />
             </Col>
           </Row>
@@ -149,23 +149,23 @@ const Checkout: React.FC<any> = () => {
           <Row>
             <Col xs={12} sm={6} md={6} lg={6}>
               <Input
-                type='text'
-                label='Medicine Name'
-                value=''
+                type="text"
+                label="Medicine Name"
+                value=""
                 onUpdate={() => console.log('hello')}
                 style={{ backgroundColor: '#F7F7F7' }}
-                intlInputLabelId='rmMedicineName'
+                intlInputLabelId="rmMedicineName"
               />
             </Col>
 
             <Col xs={12} sm={6} md={6} lg={6}>
               <Input
-                type='text'
-                label='Quantity'
-                value=''
+                type="text"
+                label="Quantity"
+                value=""
                 onUpdate={() => console.log('hello')}
                 style={{ backgroundColor: '#F7F7F7' }}
-                intlInputLabelId='rmMedicineQuantity'
+                intlInputLabelId="rmMedicineQuantity"
               />
             </Col>
           </Row>
@@ -174,13 +174,13 @@ const Checkout: React.FC<any> = () => {
             <Col xs={12} sm={12} md={12} lg={12}>
               <Heading>
                 <FormattedMessage
-                  id='rmPrescripttionUpload'
-                  defaultMessage='Upload your prescription'
+                  id="rmPrescripttionUpload"
+                  defaultMessage="Upload your prescription"
                 />
               </Heading>
             </Col>
             <Col xs={12} sm={12} md={12} lg={12}>
-              <Uploader onChange='' intlUploadText='rmUploadText' />
+              <Uploader onChange="" intlUploadText="rmUploadText" />
             </Col>
           </Row>
 
@@ -188,8 +188,8 @@ const Checkout: React.FC<any> = () => {
           <DeliveryAddress>
             <Heading>
               <FormattedMessage
-                id='checkoutDeliveryAddress'
-                defaultMessage='Select Your Delivery Address'
+                id="checkoutDeliveryAddress"
+                defaultMessage="Select Your Delivery Address"
               />
             </Heading>
             <ButtonGroup>
@@ -201,7 +201,7 @@ const Checkout: React.FC<any> = () => {
                     key={item.id}
                     title={item.name}
                     content={item.info}
-                    name='address'
+                    name="address"
                     checked={item.type === 'primary'}
                     onChange={() =>
                       dispatch({
@@ -215,13 +215,13 @@ const Checkout: React.FC<any> = () => {
                 )}
                 secondaryComponent={
                   <Button
-                    title='Add Adderss'
-                    iconPosition='right'
-                    colors='primary'
-                    size='small'
-                    variant='outlined'
-                    type='button'
-                    intlButtonId='addAddressBtn'
+                    title="Add Adderss"
+                    iconPosition="right"
+                    colors="primary"
+                    size="small"
+                    variant="outlined"
+                    type="button"
+                    intlButtonId="addAddressBtn"
                     onClick={() =>
                       handleModal(UpdateAddress, 'add-address-modal')
                     }
@@ -234,8 +234,8 @@ const Checkout: React.FC<any> = () => {
           <Contact>
             <Heading>
               <FormattedMessage
-                id='contactNumberText'
-                defaultMessage='Select Your Contact Number'
+                id="contactNumberText"
+                defaultMessage="Select Your Contact Number"
               />
             </Heading>
             <ButtonGroup>
@@ -254,20 +254,20 @@ const Checkout: React.FC<any> = () => {
                         payload: item.id.toString(),
                       })
                     }
-                    name='contact'
+                    name="contact"
                     onEdit={() => handleEditDelete(item, 'edit', 'contact')}
                     onDelete={() => handleEditDelete(item, 'delete', 'contact')}
                   />
                 )}
                 secondaryComponent={
                   <Button
-                    title='Add Contact'
-                    iconPosition='right'
-                    colors='primary'
-                    size='small'
-                    variant='outlined'
-                    type='button'
-                    intlButtonId='addContactBtn'
+                    title="Add Contact"
+                    iconPosition="right"
+                    colors="primary"
+                    size="small"
+                    variant="outlined"
+                    type="button"
+                    intlButtonId="addContactBtn"
                     onClick={() =>
                       handleModal(UpdateContact, 'add-contact-modal')
                     }
@@ -280,9 +280,9 @@ const Checkout: React.FC<any> = () => {
           <SubmitBtnWrapper>
             <Button
               onClick={handleSubmit}
-              type='button'
-              title='Submit Request'
-              intlButtonId='submitRequest'
+              type="button"
+              title="Submit Request"
+              intlButtonId="submitRequest"
               loader={<Loader />}
               isLoading={loading}
             />

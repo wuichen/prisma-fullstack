@@ -4,7 +4,7 @@ import { themeGet } from '@styled-system/theme-get';
 import * as Yup from 'yup';
 import { closeModal } from '@redq/reuse-modal';
 import { FormikProps, ErrorMessage, Formik, Form } from 'formik';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import MaskedInput from 'react-text-mask';
 import { ProfileContext } from 'contexts/profile/profile.context';
 import Button from 'components/Button/Button';
@@ -76,26 +76,26 @@ const CreateOrUpdateContact: React.FC<Props> = ({ item }) => {
                 /\d/,
                 /\d/,
               ]}
-              className='form-control'
-              placeholder='Enter a phone number'
+              className="form-control"
+              placeholder="Enter a phone number"
               guide={false}
-              id='my-input-id'
+              id="my-input-id"
               value={values.number}
               onChange={handleChange}
               onBlur={handleBlur}
-              name='number'
+              name="number"
               render={(ref: any, props: {}) => (
                 <StyledInput ref={ref} {...props} />
               )}
             />
           </FieldWrapper>
-          <ErrorMessage name='number' component={StyledError} />
+          <ErrorMessage name="number" component={StyledError} />
 
           <Button
             disabled={isSubmitting}
-            type='submit'
-            title='Save Contact'
-            size='medium'
+            type="submit"
+            title="Save Contact"
+            size="medium"
             fullwidth={true}
           />
         </Form>

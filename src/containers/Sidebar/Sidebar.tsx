@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Sticky from 'react-stickynode';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Popover from 'components/Popover/Popover';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import {
   CartPopupBody,
   PopupHeader,
@@ -100,19 +100,19 @@ const FixedCart: React.FC<CartPropsType> = ({
     <CartPopupBody className={className} style={style}>
       <PopupHeader>
         <PopupItemCount>
-          <ShoppingBagLarge width='19px' height='24px' />
+          <ShoppingBagLarge width="19px" height="24px" />
           <span>
             {cartItemsCount}
             &nbsp;
             {cartItemsCount > 1 ? (
-              <FormattedMessage id='cartItems' defaultMessage='items' />
+              <FormattedMessage id="cartItems" defaultMessage="items" />
             ) : (
-              <FormattedMessage id='cartItem' defaultMessage='item' />
+              <FormattedMessage id="cartItem" defaultMessage="item" />
             )}
           </span>
         </PopupItemCount>
 
-        <CloseButton onClick={onCloseBtnClick} className='fixedCartClose'>
+        <CloseButton onClick={onCloseBtnClick} className="fixedCartClose">
           <CloseIcon />
         </CloseButton>
       </PopupHeader>
@@ -133,7 +133,7 @@ const FixedCart: React.FC<CartPropsType> = ({
           />
         )}
       >
-        <ItemWrapper className='items-wrapper'>
+        <ItemWrapper className="items-wrapper">
           {!!cartItemsCount ? (
             items.map((item) => (
               <TextCartItem
@@ -147,8 +147,8 @@ const FixedCart: React.FC<CartPropsType> = ({
           ) : (
             <NoProductMsg>
               <FormattedMessage
-                id='noProductFound'
-                defaultMessage='No products found'
+                id="noProductFound"
+                defaultMessage="No products found"
               />
             </NoProductMsg>
           )}
@@ -162,8 +162,8 @@ const FixedCart: React.FC<CartPropsType> = ({
               {!displayCoupon ? (
                 <button onClick={toggleCoupon}>
                   <FormattedMessage
-                    id='specialCode'
-                    defaultMessage='Have a special code?'
+                    id="specialCode"
+                    defaultMessage="Have a special code?"
                   />
                 </button>
               ) : (
@@ -173,8 +173,8 @@ const FixedCart: React.FC<CartPropsType> = ({
                     value={couponText}
                     onClick={handleApplyCoupon}
                     disabled={!couponText.length || !items.length}
-                    buttonTitle='Apply'
-                    intlCouponBoxPlaceholder='couponPlaceholder'
+                    buttonTitle="Apply"
+                    intlCouponBoxPlaceholder="couponPlaceholder"
                     style={{
                       boxShadow: '0 3px 6px rgba(0, 0, 0, 0.06)',
                     }}
@@ -186,8 +186,8 @@ const FixedCart: React.FC<CartPropsType> = ({
           ) : (
             <CouponCode>
               <FormattedMessage
-                id='couponApplied'
-                defaultMessage='Coupon Applied'
+                id="couponApplied"
+                defaultMessage="Coupon Applied"
               />
               <span>{coupon.code}</span>
             </CouponCode>
@@ -195,13 +195,13 @@ const FixedCart: React.FC<CartPropsType> = ({
         </PromoCode>
 
         {cartItemsCount !== 0 ? (
-          <Link href='/checkout'>
+          <Link href="/checkout">
             <CheckoutButton onClick={onCheckout}>
               <>
                 <Title>
                   <FormattedMessage
-                    id='navlinkCheckout'
-                    defaultMessage='Checkout'
+                    id="navlinkCheckout"
+                    defaultMessage="Checkout"
                   />
                 </Title>
                 <PriceBox>
@@ -216,8 +216,8 @@ const FixedCart: React.FC<CartPropsType> = ({
             <>
               <Title>
                 <FormattedMessage
-                  id='navlinkCheckout'
-                  defaultMessage='Checkout'
+                  id="navlinkCheckout"
+                  defaultMessage="Checkout"
                 />
               </Title>
               <PriceBox>

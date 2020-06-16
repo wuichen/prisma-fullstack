@@ -6,7 +6,7 @@ import {
   StripeProvider,
   ReactStripeElements,
 } from 'react-stripe-elements';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { closeModal } from '@redq/reuse-modal';
 import { GET_PAYMENT } from 'graphql/mutation/order';
 import StripeFormWrapper, {
@@ -64,7 +64,7 @@ const StripePaymentForm = ({ item: { price, buttonText } }: Item) => {
         <div className="example">
           <Elements>
             <StripeForm
-              getToken={token => sendTokenToServer(token)}
+              getToken={(token) => sendTokenToServer(token)}
               buttonText={buttonText}
             />
           </Elements>

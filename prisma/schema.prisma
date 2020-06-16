@@ -30,7 +30,7 @@ model Role {
   id     Int     @default(autoincrement()) @id
   name   String  @unique
   Staff  Staff[]
-  schema String
+  schema String?
 }
 
 model Staff {

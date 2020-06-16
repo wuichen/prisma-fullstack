@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import gql from 'graphql-tag';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import {
   OrderBox,
   OrderListWrapper,
@@ -52,7 +52,7 @@ const GET_ORDERS = gql`
 
 const orderTableColumns = [
   {
-    title: <FormattedMessage id='cartItems' defaultMessage='Items' />,
+    title: <FormattedMessage id="cartItems" defaultMessage="Items" />,
     dataIndex: '',
     key: 'items',
     width: 250,
@@ -75,7 +75,7 @@ const orderTableColumns = [
   },
   {
     title: (
-      <FormattedMessage id='intlTableColTitle2' defaultMessage='Quantity' />
+      <FormattedMessage id="intlTableColTitle2" defaultMessage="Quantity" />
     ),
     dataIndex: 'quantity',
     key: 'quantity',
@@ -83,7 +83,7 @@ const orderTableColumns = [
     width: 100,
   },
   {
-    title: <FormattedMessage id='intlTableColTitle3' defaultMessage='Price' />,
+    title: <FormattedMessage id="intlTableColTitle3" defaultMessage="Price" />,
     dataIndex: '',
     key: 'price',
     align: 'right',
@@ -130,7 +130,7 @@ const OrdersContent: React.FC<OrderTableProps> = ({
 
   if (error) return <div>{error.message}</div>;
 
-  const handleClick = order => {
+  const handleClick = (order) => {
     setOrder(order);
     setActive(order.id);
   };
@@ -144,8 +144,8 @@ const OrdersContent: React.FC<OrderTableProps> = ({
           <OrderListWrapper style={{ height: size.height }}>
             <Title style={{ padding: '0 20px' }}>
               <FormattedMessage
-                id='intlOrderPageTitle'
-                defaultMessage='My Order'
+                id="intlOrderPageTitle"
+                defaultMessage="My Order"
               />
             </Title>
 
@@ -175,8 +175,8 @@ const OrdersContent: React.FC<OrderTableProps> = ({
                 ) : (
                   <NoOrderFound>
                     <FormattedMessage
-                      id='intlNoOrderFound'
-                      defaultMessage='No order found'
+                      id="intlNoOrderFound"
+                      defaultMessage="No order found"
                     />
                   </NoOrderFound>
                 )}
@@ -187,8 +187,8 @@ const OrdersContent: React.FC<OrderTableProps> = ({
           <OrderDetailsWrapper ref={targetRef}>
             <Title style={{ padding: '0 20px' }}>
               <FormattedMessage
-                id='orderDetailsText'
-                defaultMessage='Order Details'
+                id="orderDetailsText"
+                defaultMessage="Order Details"
               />
             </Title>
             {order && order.id && (

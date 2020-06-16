@@ -13,7 +13,7 @@ import {
   ProductCardWrapper,
 } from './Products.style';
 import { CURRENCY } from 'helper/constant';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Button from 'components/Button/Button';
 import Loader from 'components/Loader/Loader';
 import Placeholder from 'components/Placeholder/Placeholder';
@@ -322,11 +322,11 @@ export const Products: React.FC<ProductsProps> = ({
         <ButtonWrapper>
           <Button
             onClick={handleLoadMore}
-            title='Load More'
-            size='small'
+            title="Load More"
+            size="small"
             isLoading={loadingMore}
-            intlButtonId='loadMoreBtn'
-            loader={<Loader color='#009E7F' />}
+            intlButtonId="loadMoreBtn"
+            loader={<Loader color="#009E7F" />}
             style={{
               minWidth: 135,
               backgroundColor: '#ffffff',

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { Col } from 'react-styled-flexboxgrid';
 import { openModal } from '@redq/reuse-modal';
 import RadioCard from 'components/RadioCard/RadioCard';

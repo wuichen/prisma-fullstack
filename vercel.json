@@ -1,10 +1,10 @@
 {
   "build": {
     "env": {
-      "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060/prisma"
+      "DATABASE_URL": "postgres://mpidgufy:H6B2LahLLs0NJEL4wzxdmAkq2_IVbQ3V@arjuna.db.elephantsql.com:5432/mpidgufy"
     }
   },
   "env": {
-    "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060/prisma"
+    "DATABASE_URL": "postgres://mpidgufy:H6B2LahLLs0NJEL4wzxdmAkq2_IVbQ3V@arjuna.db.elephantsql.com:5432/mpidgufy"
   }
 }
