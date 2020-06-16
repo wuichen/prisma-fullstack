@@ -1,10 +1,10 @@
 {
   "build": {
     "env": {
-      "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060?schema=prisma"
+      "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060/prisma-admin"
     }
   },
   "env": {
-    "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060?schema=prisma"
+    "DATABASE_URL": "postgresql://doadmin:ptn7wbf6rk4rwfog@db-postgresql-sgp1-64954-do-user-7099203-0.a.db.ondigitalocean.com:25060/prisma-admin"
   }
 }
