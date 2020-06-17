@@ -19,7 +19,12 @@ import icons from 'oah-eva-icon';
 import Header from './Header';
 import SimpleLayout from './SimpleLayout';
 import menuItems from './menuItem';
-import { MeQuery, MeQueryVariables, useMeQuery } from '../../generated';
+import {
+  MeQuery,
+  MeQueryVariables,
+  useMeQuery,
+  useGetSchemaQuery,
+} from '../../generated';
 import { ApolloQueryResult } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -55,10 +60,11 @@ const LayoutPage: React.FC = ({ children }) => {
 
   const authLayout = router.pathname.startsWith('/admin/auth');
   const adminLayout = router.pathname.startsWith('/admin');
+  const { data: schemaData } = useGetSchemaQuery();
 
-  const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
-    request(process.env.API_URL, query)
-  );
+  // const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
+  //   request(process.env.API_URL, query)
+  // );
 
   useEffect(() => {
     if (

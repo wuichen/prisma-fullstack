@@ -4,7 +4,7 @@ import { themeGet } from '@styled-system/theme-get';
 import * as Yup from 'yup';
 import { closeModal } from '@redq/reuse-modal';
 import { FormikProps, ErrorMessage, Formik, Form } from 'formik';
-import { useMutation } from '@apollo/client';
+import { useMutation } from 'graphql-hooks';
 import MaskedInput from 'react-text-mask';
 import { ProfileContext } from 'contexts/profile/profile.context';
 import Button from 'components/Button/Button';

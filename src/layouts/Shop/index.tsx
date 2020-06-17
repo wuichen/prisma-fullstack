@@ -1,4 +1,5 @@
 import React from 'react';
+// import App from 'next/app';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'theme';
 import { AuthProvider } from 'contexts/auth/auth.provider';
@@ -19,7 +20,6 @@ import localCn from 'data/translation/zh.json';
 import localIl from 'data/translation/he.json';
 
 import { GlobalStyle } from 'styled/global.style';
-import { useRouter } from 'next/router';
 
 // Language translation Config
 const messages = {
@@ -31,32 +31,22 @@ const messages = {
   he: localIl,
 };
 // need to provide types
-const ShopApp = ({ children }) => {
-  let userAgent, locale, query, deviceType;
-  const router = useRouter();
-  if (typeof document !== 'undefined') {
-    userAgent = navigator.userAgent;
-    locale = localStorage.getItem('locale');
-    query = router.query;
-    deviceType = useDeviceType(userAgent);
-  }
-
+const ShopApp = ({ children, userAgent, locale, query }) => {
+  const deviceType = useDeviceType(userAgent);
   return (
     <ThemeProvider theme={theme}>
       <LanguageProvider messages={messages} initLocale={locale}>
         <CartProvider>
           <SearchProvider query={query}>
             <HeaderProvider>
-              {/* <StickyProvider> */}
-              <AuthProvider>
-                <>
-                  <AppLayout deviceType={deviceType ? deviceType : {}}>
-                    {children}
-                  </AppLayout>
-                  <GlobalStyle />
-                </>
-              </AuthProvider>
-              {/* </StickyProvider> */}
+              <StickyProvider>
+                <AuthProvider>
+                  <>
+                    <AppLayout deviceType={deviceType}>{children}</AppLayout>
+                    <GlobalStyle />
+                  </>
+                </AuthProvider>
+              </StickyProvider>
             </HeaderProvider>
           </SearchProvider>
         </CartProvider>

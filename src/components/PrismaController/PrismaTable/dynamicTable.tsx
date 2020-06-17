@@ -34,7 +34,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     query,
   } = useContext(TableContext);
   const modelObject = models.find((item) => item.id === model);
-
+  console.log(models);
   const {
     where,
     orderBy,
@@ -52,7 +52,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         ...page,
       },
       fetchPolicy: 'no-cache',
-    },
+    }
   );
 
   const [deleteOne] = useMutation(mutationDocument(models, model, 'delete'));
@@ -85,7 +85,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 
   const onAction = (
     action: 'create' | 'delete' | 'connect',
-    value?: unknown,
+    value?: unknown
   ) => {
     switch (action) {
       case 'delete':
@@ -110,7 +110,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     }
   };
   const parentName = modelObject?.fields.find(
-    (item) => item.type === parent?.name,
+    (item) => item.type === parent?.name
   )?.name;
   const _data: any[] = data ? data[`findMany${model}`] : [];
   return (
@@ -143,9 +143,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   _data.filter(
                     (item) =>
                       modelObject &&
-                      item[modelObject.idField] !==
-                        connect[modelObject.idField],
-                  ),
+                      item[modelObject.idField] !== connect[modelObject.idField]
+                  )
                 )
               : _data
           }

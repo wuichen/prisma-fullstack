@@ -1,10 +1,5 @@
 export default () => [
-  {
-    email: 'ichenwu01@gmail.com',
-    firstName: 'I Chen',
-    lastName: 'Wu',
-    username: 'wuichen',
-  },
+
   {
     email: 'jesschannel@gmail.com',
     firstName: 'Jessica',

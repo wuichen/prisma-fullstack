@@ -26,6 +26,10 @@ import OFFERS from 'data/offers';
 import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
 import { useFindOnePlatformQuery } from 'generated';
+import { parseCookies } from 'helper/parse-cookies';
+import ShopApp from 'layouts/Shop';
+import { useDeviceType } from 'helper/useDeviceType';
+
 // export default function Index() {
 //   const { data, error } = useSWR(print(FindManyUserDocument), (query) =>
 //     request('http://localhost:3000/api/graphql', query, {
@@ -121,8 +125,9 @@ function HomePage({ deviceType, platform }) {
   );
 }
 
-const IndexPage = ({ deviceType, sub }) => {
+const IndexPage = ({ sub, userAgent, query, locale }) => {
   const router = useRouter();
+  const deviceType = useDeviceType(userAgent);
   const { data, loading, error } = useFindOnePlatformQuery({
     variables: {
       where: {
@@ -146,26 +151,36 @@ const IndexPage = ({ deviceType, sub }) => {
   //   }
   // });
   if (error) {
-    router.push('https://www.mercy-app.com');
+    if (typeof window !== 'undefined') {
+      window.location.replace('https://www.mercy-app.com');
+    }
   }
 
   if (data && data.findOnePlatform) {
-    return <HomePage platform={data.findOnePlatform} deviceType={deviceType} />;
+    return (
+      <ShopApp userAgent={userAgent} query={query} locale={locale}>
+        <HomePage platform={data.findOnePlatform} deviceType={deviceType} />
+      </ShopApp>
+    );
   }
   return <div>loading</div>;
 };
 
 IndexPage.getInitialProps = async (ctx: any) => {
-  const { req } = ctx;
+  const { req, query } = ctx;
+  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const { locale } = parseCookies(req);
+
   let host;
   let sub = 'www';
   if (req && req.headers.host) {
     host = req.headers.host;
   }
-  if (host.includes('localhost')) {
-    return { sub: 'furniture' };
-  }
+
   if (host) {
+    if (host.includes('localhost')) {
+      return { sub: 'furniture' };
+    }
     sub = host.split('mercy-app')[0];
     if (sub) {
       sub = sub.split('.')[0];
@@ -173,7 +188,7 @@ IndexPage.getInitialProps = async (ctx: any) => {
       sub = 'www';
     }
   }
-  return { sub };
+  return { userAgent, query, locale, sub };
 };
 
 export default withApollo(IndexPage);

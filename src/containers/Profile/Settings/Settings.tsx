@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from 'graphql-hooks';
 import { Col } from 'react-styled-flexboxgrid';
 import { openModal } from '@redq/reuse-modal';
 import RadioCard from 'components/RadioCard/RadioCard';
@@ -24,6 +24,7 @@ import UpdateContact from '../../Checkout/Update/UpdateContact';
 import Button from 'components/Button/Button';
 import { UPDATE_ME } from 'graphql/mutation/me';
 import { FormattedMessage } from 'react-intl';
+import { print } from 'graphql';
 
 type SettingsContentProps = {
   deviceType?: {
@@ -35,12 +36,12 @@ type SettingsContentProps = {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ deviceType }) => {
   const { state, dispatch } = useContext(ProfileContext);
-  const [updateMeMutation] = useMutation(UPDATE_ME);
-  const [deleteContactMutation] = useMutation(DELETE_CONTACT);
-  const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
-  const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
+  const [updateMeMutation] = useMutation(print(UPDATE_ME));
+  const [deleteContactMutation] = useMutation(print(DELETE_CONTACT));
+  const [deleteAddressMutation] = useMutation(print(DELETE_ADDRESS));
+  const [deletePaymentCardMutation] = useMutation(print(DELETE_CARD));
 
-  const { address, contact, card } = state;
+  const { addresses, contacts, cards } = state;
 
   const handleChange = (value: string, field: string) => {
     dispatch({ type: 'HANDLE_ON_INPUT_CHANGE', payload: { value, field } });
@@ -160,7 +161,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ deviceType }) => {
               </HeadingSection>
               <ButtonGroup>
                 <RadioGroup
-                  items={contact}
+                  items={contacts}
                   component={(item: any) => (
                     <RadioCard
                       id={item.id}
@@ -213,7 +214,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ deviceType }) => {
               </HeadingSection>
               <ButtonGroup>
                 <RadioGroup
-                  items={address}
+                  items={addresses}
                   component={(item: any) => (
                     <RadioCard
                       id={item.id}
@@ -268,7 +269,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ deviceType }) => {
               <PaymentGroup
                 name="payment"
                 deviceType={deviceType}
-                items={card}
+                items={cards}
                 onEditDeleteField={(item: any, type: string) =>
                   handleEditDelete(item, type, 'payment')
                 }

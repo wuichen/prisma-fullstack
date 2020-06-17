@@ -4751,6 +4751,11 @@ deprecated-decorator@^0.1.6:
   resolved "https://registry.yarnpkg.com/deprecated-decorator/-/deprecated-decorator-0.1.6.tgz#00966317b7a12fe92f3cc831f7583af329b86c37"
   integrity sha1-AJZjF7ehL+kvPMgx91g68ym4bDc=
 
+dequal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.0.tgz#41c6065e70de738541c82cdbedea5292277a017e"
+  integrity sha512-/Nd1EQbQbI9UbSHrMiKZjFLrXSnU328iQdZKPQf78XQI6C+gutkFUeoHpG5J08Ioa6HeRbRNFpSIclh1xyG0mw==
+
 des.js@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/des.js/-/des.js-1.0.1.tgz#5382142e1bdc53f85d86d53e5f4aa7deb91e0843"
@@ -6158,6 +6163,14 @@ graphql-fields@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/graphql-fields/-/graphql-fields-2.0.3.tgz#5e68dff7afbb202be4f4f40623e983b22c96ab8f"
   integrity sha512-x3VE5lUcR4XCOxPIqaO4CE+bTK8u6gVouOdpQX9+EKHr+scqtK5Pp/l8nIGqIpN1TUlkKE6jDCCycm/WtLRAwA==
+
+graphql-hooks@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/graphql-hooks/-/graphql-hooks-4.4.4.tgz#ce0f57967f5f3a9cfd3f881acccb56370f8c7098"
+  integrity sha512-heCGWN0VRGvOTPrgCcXwvrCxTQAQJO/Pw3kjarbe22KcOlVl6AVhdgQOf9E/9wXgBBcX8CXPNoxzyXVg55PUnw==
+  dependencies:
+    dequal "^1.0.0"
+    extract-files "^8.0.0"
 
 graphql-request@^1.5.0:
   version "1.8.2"
