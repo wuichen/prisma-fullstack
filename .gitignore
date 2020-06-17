@@ -31,7 +31,7 @@ yarn-error.log*
 
 
 src/api/graphql/models/**/*.ts
-src/views/models/**/*.tsx
+src/pages/admin/models/**/*.tsx
 src/generated/**
 src/graphql/generated/**
 prisma/migrations/**

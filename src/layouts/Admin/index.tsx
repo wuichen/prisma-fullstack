@@ -28,10 +28,7 @@ import {
 import { ApolloQueryResult } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useSWR from 'swr';
-import { GetSchemaDocument } from 'generated';
-import { print } from 'graphql/language/printer';
-import request from 'graphql-request';
+
 interface ContextProps {
   me?: MeQuery['me'] | null;
   refetch?: (

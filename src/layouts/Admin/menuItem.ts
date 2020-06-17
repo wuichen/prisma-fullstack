@@ -1,7 +1,7 @@
 import { MenuItemType } from 'oah-ui';
 
 const items: MenuItemType[] = [
-  { title: 'Home Page', icon: { name: 'home' }, link: { href: '/admin/models/settings' } },
+  { title: 'Home Page', icon: { name: 'home' }, link: { href: '/admin' } },
   // {
   //   title: 'Models',
   //   icon: { name: 'layers-outline' },

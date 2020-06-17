@@ -14,6 +14,6 @@ const deleteFolderRecursive = (path: string) => {
   }
 };
 
-deleteFolderRecursive('src/views/models')
+deleteFolderRecursive('src/pages/admin/models')
 deleteFolderRecursive('src/api/graphql/models')
 deleteFolderRecursive('src/graphql/generated')

@@ -12,6 +12,6 @@ export default #{id};
 
 buildSettingsSchema();
 
-generatePages({ outPut: 'src/views/models/', pageContent });
+generatePages({ outPut: 'src/pages/admin/models/', pageContent });
 
 generateGraphql({ graphqlOutput: 'src/graphql/generated' });
