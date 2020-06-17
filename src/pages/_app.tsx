@@ -30,7 +30,7 @@ import 'components/MultiCarousel/MultiCarousel.style.css';
 import '@redq/reuse-modal/lib/index.css';
 import { GlobalStyle } from 'styled/global.style';
 import { parseCookies } from 'helper/parse-cookies';
-import Layout from 'Layouts/Admin';
+import Layout from 'layouts/Admin';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from 'api/apollo';
 
@@ -121,7 +121,7 @@ ExtendedApp.getInitialProps = async (appContext) => {
 // import { NextPage } from 'next';
 // import { useApollo } from 'api/apollo';
 // import { ApolloProvider } from '@apollo/client';
-// import Layout from 'Layouts/Admin';
+// import Layout from 'layouts/Admin';
 
 // // External CSS import here
 // import 'rc-drawer/assets/index.css';

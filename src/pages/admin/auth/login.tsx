@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import Auth, { Group } from 'components/Auth';
 import Socials from 'components/Auth/Socials';
 import { useLoginMutation } from 'generated';
-import { LayoutContext } from 'Layouts/Admin';
+import { LayoutContext } from 'layouts/Admin';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
