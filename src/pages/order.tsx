@@ -4,7 +4,7 @@ import { SEO } from 'components/seo';
 import Order from 'containers/Profile/Order/Order';
 import { PageWrapper, SidebarSection } from 'containers/Profile/Profile.style';
 import Sidebar from 'containers/Profile/Sidebar/Sidebar';
-import { withApollo } from 'helper/apollo';
+// import { withApollo } from 'helper/apollo';
 import { Modal } from '@redq/reuse-modal';
 
 type Props = {
@@ -33,4 +33,4 @@ const OrderPage: NextPage<Props> = ({ deviceType }) => {
   );
 };
 
-export default withApollo(OrderPage);
+export default OrderPage;

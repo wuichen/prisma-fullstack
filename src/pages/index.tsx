@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Modal } from '@redq/reuse-modal';
-import { withApollo } from 'api/client';
+// import { withApollo } from 'api/client';
 import { SEO } from 'components/seo';
 import StoreNav from 'components/StoreNav/StoreNav';
 import Carousel from 'components/Carousel/Carousel';
@@ -191,4 +191,4 @@ IndexPage.getInitialProps = async (ctx: any) => {
   return { userAgent, query, locale, sub };
 };
 
-export default withApollo(IndexPage);
+export default IndexPage;
