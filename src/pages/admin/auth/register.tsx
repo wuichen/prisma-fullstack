@@ -1,8 +1,8 @@
 import { InputGroup, Checkbox, Button } from 'oah-ui';
 import React, { useContext, useState } from 'react';
 
-import Auth from 'Components/Auth';
-import Socials from 'Components/Auth/Socials';
+import Auth from 'components/Auth';
+import Socials from 'components/Auth/Socials';
 import { useSignupMutation } from 'generated';
 import { LayoutContext } from 'Layouts/Admin';
 import { useRouter } from 'next/router';
@@ -83,19 +83,32 @@ export default function Register() {
             placeholder="Confirm Password"
             required
             value={state.confirmPassword}
-            onChange={(event) => onChange(event.target.value, 'confirmPassword')}
+            onChange={(event) =>
+              onChange(event.target.value, 'confirmPassword')
+            }
           />
-          {state.confirmPassword && state.password !== state.confirmPassword && (
-            <span className="caption-2 status-Danger">Password and Confirm Password must be match</span>
-          )}
+          {state.confirmPassword &&
+            state.password !== state.confirmPassword && (
+              <span className="caption-2 status-Danger">
+                Password and Confirm Password must be match
+              </span>
+            )}
         </InputGroup>
-        <Checkbox checked={state.checkbox} onChange={(value) => onChange(value, 'checkbox')}>
+        <Checkbox
+          checked={state.checkbox}
+          onChange={(value) => onChange(value, 'checkbox')}
+        >
           Agree to{' '}
           <Link href="/">
             <a>Terms & Conditions</a>
           </Link>
         </Checkbox>
-        <Button disabled={disabled} status="Success" shape="SemiRound" fullWidth>
+        <Button
+          disabled={disabled}
+          status="Success"
+          shape="SemiRound"
+          fullWidth
+        >
           Register
         </Button>
       </form>

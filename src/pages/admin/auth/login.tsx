@@ -1,7 +1,7 @@
 import { InputGroup, Checkbox, Button } from 'oah-ui';
 import React, { useContext, useState } from 'react';
-import Auth, { Group } from 'Components/Auth';
-import Socials from 'Components/Auth/Socials';
+import Auth, { Group } from 'components/Auth';
+import Socials from 'components/Auth/Socials';
 import { useLoginMutation } from 'generated';
 import { LayoutContext } from 'Layouts/Admin';
 import { useRouter } from 'next/router';
@@ -57,14 +57,22 @@ export default function Login() {
           />
         </InputGroup>
         <Group>
-          <Checkbox checked={state.checkbox} onChange={(value) => onChange(value, 'checkbox')}>
+          <Checkbox
+            checked={state.checkbox}
+            onChange={(value) => onChange(value, 'checkbox')}
+          >
             Remember me
           </Checkbox>
           <Link href="/admin/auth/request-password">
             <a>Forgot Password?</a>
           </Link>
         </Group>
-        <Button disabled={!state.email || !state.password} status="Success" shape="SemiRound" fullWidth>
+        <Button
+          disabled={!state.email || !state.password}
+          status="Success"
+          shape="SemiRound"
+          fullWidth
+        >
           Login
         </Button>
       </form>

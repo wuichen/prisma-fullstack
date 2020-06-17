@@ -1,12 +1,15 @@
 import React from 'react';
 import { InputGroup, Button } from 'oah-ui';
 
-import Auth, { Group } from 'Components/Auth';
+import Auth, { Group } from 'components/Auth';
 import Link from 'next/link';
 
 export default function RequestPassword() {
   return (
-    <Auth title="Forgot Password" subTitle="Enter your email address and we’ll send a link to reset your password">
+    <Auth
+      title="Forgot Password"
+      subTitle="Enter your email address and we’ll send a link to reset your password"
+    >
       <form>
         <InputGroup fullWidth>
           <input type="email" placeholder="Email Address" />

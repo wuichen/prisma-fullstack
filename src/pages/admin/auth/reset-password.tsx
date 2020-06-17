@@ -1,6 +1,6 @@
 import React from 'react';
 import { InputGroup, Button } from 'oah-ui';
-import Auth, { Group } from 'Components/Auth';
+import Auth, { Group } from 'components/Auth';
 import Link from 'next/link';
 
 export default function ResetPassword() {
