@@ -1,8 +1,3 @@
-// import { request } from 'graphql-request';
-// import useSWR from 'swr';
-// import { FindManyUserDocument } from 'generated';
-// import { print } from 'graphql/language/printer';
-import { useEffect, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Modal } from '@redq/reuse-modal';
@@ -23,35 +18,8 @@ import {
 } from 'styled/pages.style';
 // Static Data Import Here
 import OFFERS from 'data/offers';
-import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
 import { useFindOnePlatformQuery } from 'generated';
-import { parseCookies } from 'helper/parse-cookies';
-import ShopApp from 'layouts/Shop';
-import { useDeviceType } from 'helper/useDeviceType';
-
-// export default function Index() {
-//   const { data, error } = useSWR(print(FindManyUserDocument), (query) =>
-//     request('http://localhost:3000/api/graphql', query, {
-//       where: { email: { equals: 'ichen' } },
-//     })
-//   );
-
-//   if (error) return <div>Failed to load</div>;
-//   if (!data) return <div>Loading...</div>;
-
-//   const { findManyUser } = data;
-
-//   return (
-//     <div>
-//       {findManyUser.map((user, i) => (
-//         <div key={i}>{user.name}</div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// const platform = 'grocery';
 
 function HomePage({ deviceType, platform }) {
   const { query } = useRouter();
@@ -125,9 +93,7 @@ function HomePage({ deviceType, platform }) {
   );
 }
 
-const IndexPage = ({ sub, userAgent, query, locale }) => {
-  const router = useRouter();
-  const deviceType = useDeviceType(userAgent);
+const IndexPage = ({ sub, deviceType }) => {
   const { data, loading, error } = useFindOnePlatformQuery({
     variables: {
       where: {
@@ -136,20 +102,7 @@ const IndexPage = ({ sub, userAgent, query, locale }) => {
     },
     skip: !sub,
   });
-  // useEffect(() => {
-  //   const { host } = window.location;
-  //   let isDev = host.includes('localhost');
-  //   let splitHost = host.split('.');
-  //   if (
-  //     (!isDev && splitHost.length === 3) ||
-  //     (isDev && splitHost.length === 2)
-  //   ) {
-  //     let page = splitHost[0];
-  //     if (page && page !== 'www') {
-  //       setPage(page);
-  //     }
-  //   }
-  // });
+
   if (error) {
     if (typeof window !== 'undefined') {
       window.location.replace('https://www.mercy-app.com');
@@ -157,19 +110,13 @@ const IndexPage = ({ sub, userAgent, query, locale }) => {
   }
 
   if (data && data.findOnePlatform) {
-    return (
-      <ShopApp userAgent={userAgent} query={query} locale={locale}>
-        <HomePage platform={data.findOnePlatform} deviceType={deviceType} />
-      </ShopApp>
-    );
+    return <HomePage platform={data.findOnePlatform} deviceType={deviceType} />;
   }
   return <div>loading</div>;
 };
 
 IndexPage.getInitialProps = async (ctx: any) => {
-  const { req, query } = ctx;
-  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const { locale } = parseCookies(req);
+  const { req } = ctx;
 
   let host;
   let sub = 'www';
@@ -188,7 +135,7 @@ IndexPage.getInitialProps = async (ctx: any) => {
       sub = 'www';
     }
   }
-  return { userAgent, query, locale, sub };
+  return { sub };
 };
 
 export default IndexPage;

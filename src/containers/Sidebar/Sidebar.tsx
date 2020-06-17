@@ -56,10 +56,14 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
     const updatedQuery = state.text
       ? { text: state.text, category: slug }
       : { category: slug };
-    router.push({
-      pathname: pathname,
-      query: updatedQuery,
-    });
+    router.push(
+      {
+        pathname: pathname,
+        query: updatedQuery,
+      },
+      undefined,
+      { shallow: true }
+    );
   };
   const isSidebarSticky = useStickyState('isSidebarSticky');
 

@@ -9,7 +9,6 @@ import { HeaderProvider } from 'contexts/header/header.provider';
 import { LanguageProvider } from 'contexts/language/language.provider';
 
 import AppLayout from 'containers/LayoutContainer/AppLayout';
-import { useDeviceType } from 'helper/useDeviceType';
 import { CartProvider } from 'contexts/cart/use-cart';
 // Language translation files
 import localEn from 'data/translation/en.json';
@@ -31,8 +30,7 @@ const messages = {
   he: localIl,
 };
 // need to provide types
-const ShopApp = ({ children, userAgent, locale, query }) => {
-  const deviceType = useDeviceType(userAgent);
+const ShopApp = ({ children, query, locale, deviceType }) => {
   return (
     <ThemeProvider theme={theme}>
       <LanguageProvider messages={messages} initLocale={locale}>
