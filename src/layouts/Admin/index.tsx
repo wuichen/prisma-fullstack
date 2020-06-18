@@ -44,7 +44,7 @@ export const LayoutContext: React.Context<ContextProps> = React.createContext(
 );
 
 const LayoutPage: React.FC = ({ children }) => {
-  const [theme, setTheme] = useState<DefaultTheme['name']>('dark');
+  const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const sidebarRef = useRef<SidebarRefObject>(null);
   const menuRef = useRef<MenuRefObject>(null);
   const [menu, setMenu] = useState([]);
