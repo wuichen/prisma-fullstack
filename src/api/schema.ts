@@ -1,5 +1,5 @@
 import { makeSchema } from '@nexus/schema'
-import * as types from './graphql'
+import * as types from './nexus'
 import { prismaSelectObject } from 'nexus-schema-plugin-prisma-select'
 import { join } from 'path'
 

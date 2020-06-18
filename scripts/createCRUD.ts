@@ -1,7 +1,7 @@
 import { createTypes } from '@prisma-tools/nexus';
 
 createTypes({
-  modelsOutput: 'src/api/graphql/models',
+  modelsOutput: 'src/api/nexus/models',
   onDelete: true,
   nexusSchema: true,
   // excludeFieldsByModel: {

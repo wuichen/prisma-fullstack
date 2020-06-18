@@ -30,7 +30,8 @@ yarn-error.log*
 .env.production.local
 
 
-src/api/graphql/models/**/*.ts
+src/api/nexus/models/**/*.ts
+src/api/modules/models/**/*.ts
 src/pages/admin/models/**/*.tsx
 src/generated/**
 src/graphql/generated/**

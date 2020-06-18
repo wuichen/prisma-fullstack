@@ -15,7 +15,7 @@ const nextConfig = {
   },
   env: {
     STRIPE_PUBLIC_KEY: 'put_your_stripe_public_key_here',
-    API_URL: 'http://localhost:3000/api/graphql',
+    API_URL: 'http://localhost:3000/api/nexus',
   },
   webpack: (config) => {
     config.resolve.modules.push(__dirname);
