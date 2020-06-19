@@ -1,4 +1,4 @@
-import { extendType, stringArg } from '@nexus/schema'
+import { extendType, stringArg, intArg } from '@nexus/schema'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from '../../utils'
@@ -54,6 +54,84 @@ export const AuthMutations = extendType({
           }),
         )
         return user
+      },
+    })
+    t.field('loginPlatform', {
+      type: 'Platform',
+      nullable: true,
+      args: {
+        platformId: intArg({ nullable: false }),
+      },
+      resolve: async (_parent, { platformId }, { prisma, userId, res }) => {
+        const platform = await prisma.platform.findOne({
+          where: {
+            id: platformId
+          },
+          include: {
+            user: true
+          }
+        })
+        let permissions = {}
+
+        if (platform && platform.user && platform.user.id) {
+          permissions = { role: 'admin', platformId: platform.id }
+        } else {
+          throw new UserInputError(`No platform found: ${platformId}`)
+        }
+
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('token', sign({ userId: userId, permissions }, JWT_SECRET), {
+            httpOnly: true,
+            maxAge: 6 * 60 * 60,
+            path: '/',
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+          }),
+        )
+        return platform
+      },
+    })
+    t.field('loginCompany', {
+      type: 'Company',
+      nullable: true,
+      args: {
+        companyId: intArg({ nullable: false }),
+      },
+      resolve: async (_parent, { companyId }, { prisma, userId, res }) => {
+        const staffs = await prisma.staff.findMany({
+          where: {
+            company: {
+              id: companyId,
+            },
+            user: {
+              id: userId,
+            },
+          },
+          include: {
+            company: true,
+            user: true,
+          },
+        })
+        let permissions = {}
+        if (staffs && staffs.length && staffs.length > 0) {
+          permissions = { role: staffs[0].role, companyId: staffs[0].company.id }
+        } else {
+          throw new UserInputError(`No company found: ${companyId}`)
+        }
+        const company = staffs.company
+
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('token', sign({ userId: userId, permissions }, JWT_SECRET), {
+            httpOnly: true,
+            maxAge: 6 * 60 * 60,
+            path: '/',
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+          }),
+        )
+        return company
       },
     })
     t.field('login', {

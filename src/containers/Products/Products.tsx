@@ -23,7 +23,7 @@ import NoResultFound from 'components/NoResult/NoResult';
 const QuickView = dynamic(() => import('../QuickView/QuickView'));
 
 const GET_PRODUCTS = gql`
-  query getProducts(
+  query findManyProduct(
     $type: String
     $text: String
     $category: String

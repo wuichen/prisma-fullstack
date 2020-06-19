@@ -7,6 +7,7 @@ export const JWT_SECRET = getConfig()?.serverRuntimeConfig.JWT_SECRET ?? null
 
 interface Token {
   userId: number
+  permissions: object
 }
 
 export function getUserId(request: NextApiRequest) {
@@ -15,6 +16,18 @@ export function getUserId(request: NextApiRequest) {
     try {
       const verifiedToken = verify(token, JWT_SECRET) as Token
       return verifiedToken && verifiedToken.userId
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+export function getUserPermissions(request: NextApiRequest) {
+  const { token } = cookie.parse(request.headers.cookie ?? '')
+  if (token && token !== 'null') {
+    try {
+      const verifiedToken = verify(token, JWT_SECRET) as Token
+      return verifiedToken && verifiedToken.permissions
     } catch (e) {
       console.log(e)
     }

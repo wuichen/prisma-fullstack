@@ -1,4 +1,6 @@
 import { InputGroup, Checkbox, Button } from 'oah-ui';
+import { Card, CardBody, CardHeader, CardFooter } from 'oah-ui';
+
 import React, { useContext, useState } from 'react';
 import Auth, { Group } from 'components/Auth';
 import Socials from 'components/Auth/Socials';
@@ -10,13 +12,34 @@ import {
 import { LayoutContext } from 'layouts/Admin';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
+import { Container, Row, Col } from 'oah-ui';
 export default function Login() {
-  // const {data: companiesData} = useFindManyCompanyQuery({
-  //   variables:{
+  const { me } = useContext(LayoutContext);
+  const { data: companiesData, loading, error } = useFindManyCompanyQuery({
+    variables: {
+      where: {
+        owner: {
+          id: {
+            equals: me.id,
+          },
+        },
+      },
+    },
+    skip: !me?.id,
+  });
 
-  //   }
-  // })
+  const { data: platformsData } = useFindManyPlatformQuery({
+    variables: {
+      where: {
+        owner: {
+          id: {
+            equals: me.id,
+          },
+        },
+      },
+    },
+    skip: !me?.id,
+  });
 
   // const [login] = useLoginMutation();
   // const { refetch } = useContext(LayoutContext);
@@ -47,8 +70,40 @@ export default function Login() {
 
   return (
     <Auth title="Entrance" subTitle="Hello! Please Select a workspace to enter">
-      <h2>My Platforms</h2>
-      <h2>My Companies</h2>
+      <Container>
+        <h2>
+          My Platforms <Button>Create</Button>
+        </h2>
+
+        <Row>
+          {platformsData?.findManyPlatform?.map((platform) => {
+            return (
+              <Col breakPoint={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <Card>
+                  <CardHeader>{platform.name}</CardHeader>
+                  <CardBody>{platform.description}</CardBody>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+        <h2>
+          My Companies <Button>Create</Button>
+        </h2>
+
+        <Row>
+          {companiesData?.findManyCompany?.map((company) => {
+            return (
+              <Col breakPoint={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <Card>
+                  <CardHeader>{company.name}</CardHeader>
+                  <CardBody>{company.description}</CardBody>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </Container>
 
       {/* <form onSubmit={onSubmit}>
         <InputGroup fullWidth>

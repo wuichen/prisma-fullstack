@@ -9,6 +9,7 @@
     "seed": "ts-node --transpile-only -P nexus.tsconfig.json prisma/seed/seed",
     "generate": "yarn remove:old && yarn generate:prisma && yarn generate:crud && yarn generate:nexus && yarn generate:admin && yarn generate:graphql",
     "generate:prisma": "prisma generate",
+    "generate:schema": "schema json -o=src/api/graphql/schema",
     "generate:crud": "ts-node --transpile-only -P nexus.tsconfig.json scripts/createCRUD",
     "generate:nexus": "ts-node --transpile-only -P nexus.tsconfig.json src/api/schema",
     "generate:admin": "ts-node --transpile-only -P nexus.tsconfig.json scripts/generateAdmin",
@@ -21,15 +22,17 @@
     "migrate-database": "prisma migrate up --experimental --auto-approve --create-db"
   },
   "dependencies": {
-    "@apollo/client": "3.0.0-rc.4",
+    "@apollo/client": "3.0.0-rc.6",
     "@apollo/react-ssr": "4.0.0-beta.1",
     "@nexus/schema": "0.14.0",
-    "@prisma-tools/admin": "1.0.10",
-    "@prisma-tools/delete": "0.0.8",
-    "@prisma-tools/nexus": "0.6.24",
-    "@prisma/client": "2.0.0",
+    "@prisma-tools/admin": "1.0.14",
+    "@prisma-tools/delete": "0.0.15",
+    "@prisma-tools/schema": "0.0.11",
+    "@prisma-tools/nexus": "0.6.25",
+    "@prisma/client": "2.0.1",
     "@redq/reuse-modal": "1.2.4-beta.0.63",
     "@styled-system/theme-get": "^5.1.2",
+    "add": "^2.0.6",
     "apollo-link-http": "^1.5.17",
     "apollo-link-schema": "^1.2.5",
     "apollo-server-micro": "2.11.0",
@@ -41,7 +44,9 @@
     "formik": "^2.1.4",
     "graphql": "14.6.0",
     "graphql-hooks": "^4.4.4",
+    "graphql-middleware": "^4.0.2",
     "graphql-request": "^2.0.0",
+    "graphql-shield": "^7.3.2",
     "graphql-tag": "2.10.3",
     "graphql-tools": "6.0.9",
     "js-cookie": "^2.2.1",
@@ -86,6 +91,7 @@
     "ts-node": "8.10.2",
     "url": "^0.11.0",
     "uuid": "^8.1.0",
+    "yarn": "^1.22.4",
     "yup": "^0.29.1"
   },
   "devDependencies": {
@@ -125,5 +131,8 @@
     "pretty-quick": "2.0.1",
     "typescript": "3.9.5"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }

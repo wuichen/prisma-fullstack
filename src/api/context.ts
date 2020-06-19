@@ -1,7 +1,8 @@
 import { PrismaClient, PrismaClientOptions } from '@prisma/client'
 import PrismaDelete, { onDeleteArgs } from '@prisma-tools/delete'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getUserId } from './utils'
+import { getUserId, getUserPermissions } from './utils'
+import { schema } from './graphql/schema/schema'
 
 class Prisma extends PrismaClient {
   constructor(options?: PrismaClientOptions) {
@@ -9,7 +10,7 @@ class Prisma extends PrismaClient {
   }
 
   async onDelete(args: onDeleteArgs) {
-    const prismaDelete = new PrismaDelete(this)
+    const prismaDelete = new PrismaDelete(this, schema)
     await prismaDelete.onDelete(args)
   }
 }
@@ -20,6 +21,7 @@ export interface Context extends NextApi {
   prisma: Prisma
   userId?: number
   select: any
+  permissions?: object
 }
 
 interface NextApi {
@@ -32,6 +34,7 @@ export function createContext({ req, res }: NextApi): Context {
     req,
     res,
     prisma,
+    permissions: getUserPermissions(req),
     userId: getUserId(req),
     select: {},
   }
