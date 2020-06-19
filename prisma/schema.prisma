@@ -47,6 +47,7 @@ model Staff {
   contact   Contact? @relation(fields: [contactId], references: [id])
   contactId Int?
   email     String?
+  private   Boolean  @default(true)
 }
 
 model Card {

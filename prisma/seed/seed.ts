@@ -534,7 +534,8 @@ const createOrConnectCompany = (product) => {
     }
   }
   if (product.type !== 'restaurant') {
-    if (count < 3) {
+    if (count < 1) {
+      const ownerId = db.users[Math.floor(Math.random() * db.users.length)].id
       company = {
         create: {
           platform: {
@@ -547,6 +548,20 @@ const createOrConnectCompany = (product) => {
             minimumOrder: 50,
             isFree: true,
           }),
+          staffs: {
+            create: [{
+              user: {
+                connect: {
+                  id: ownerId
+                }
+              },
+              role: {
+                connect: {
+                  name: 'admin'
+                }
+              }
+            }]
+          },
           name: `A ${product.type} company`,
           description: `A ${product.type} company description`,
           platformSlug: product.type,
@@ -558,7 +573,7 @@ const createOrConnectCompany = (product) => {
           // },
           owner: {
             connect: {
-              id: db.users[Math.floor(Math.random() * db.users.length)].id,
+              id: ownerId,
             },
           },
         },

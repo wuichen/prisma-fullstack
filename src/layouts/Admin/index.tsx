@@ -29,6 +29,8 @@ import { ApolloQueryResult } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
+import jwtDecode from 'jwt-decode';
+
 interface ContextProps {
   me?: MeQuery['me'] | null;
   refetch?: (
@@ -58,6 +60,21 @@ const LayoutPage: React.FC = ({ children }) => {
   const authLayout = router.pathname.startsWith('/admin/auth');
   const adminLayout = router.pathname.startsWith('/admin');
   const { data: schemaData } = useGetSchemaQuery();
+
+  useEffect(() => {
+    if (router.pathname) {
+      if (router.pathname.includes('/models')) {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          router.push('/admin/auth/login');
+        }
+        const decode = jwtDecode(accessToken);
+        if (!decode.permissions) {
+          router.push('/admin/auth/entrance');
+        }
+      }
+    }
+  }, [router]);
 
   // const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
   //   request(process.env.API_URL, query)
