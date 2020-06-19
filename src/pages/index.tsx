@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Modal } from '@redq/reuse-modal';
 // import { withApollo } from 'api/client';
@@ -20,11 +20,13 @@ import {
 import OFFERS from 'data/offers';
 import storeType from 'constants/storeType';
 import { useFindOnePlatformQuery } from 'generated';
+import { PlatformContext } from 'contexts/platform/platform.context';
 
 function HomePage({ deviceType, platform }) {
   const { query } = useRouter();
   const targetRef = React.useRef(null);
-  React.useEffect(() => {
+  const { dispatch, state: platformState } = useContext(PlatformContext);
+  useEffect(() => {
     if ((query.text || query.category) && targetRef.current) {
       window.scrollTo({
         top: targetRef.current.offsetTop - 110,
@@ -32,6 +34,24 @@ function HomePage({ deviceType, platform }) {
       });
     }
   }, [query]);
+
+  if (!platformState.platform && platform) {
+    dispatch({
+      type: 'SET',
+      payload: {
+        platform,
+      },
+    });
+  }
+
+  // useEffect(() => {
+  //   if (!state.platform && platform) {
+  //     dispatch({
+  //       type: 'SET',
+  //       payload: platform,
+  //     });
+  //   }
+  // }, [state]);
 
   return (
     <>

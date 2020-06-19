@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Sticky from 'react-stickynode';
@@ -6,6 +6,11 @@ import Header from './Header/Header';
 import { useStickyState } from 'contexts/app/app.provider';
 import { LayoutWrapper } from './Layout.style';
 import { isCategoryPage } from './is-home-page';
+import AddSlideIn from 'components/Add/Add.SlideIn';
+import CompanyForm from 'components/Add/Add.CompanyForm';
+import { useMeQuery } from '../../generated';
+import { AuthContext } from 'contexts/auth/auth.context';
+
 const MobileHeader = dynamic(() => import('./Header/MobileHeader'), {
   ssr: false,
 });
@@ -30,6 +35,21 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
   const { pathname } = useRouter();
 
   const isHomePage = isCategoryPage(pathname);
+  const { authDispatch } = useContext<any>(AuthContext);
+
+  const { data: userData, loading, refetch } = useMeQuery();
+
+  useEffect(() => {
+    if (userData?.me) {
+      authDispatch({
+        type: 'GET_ME',
+        payload: {
+          me: userData.me,
+          refetch,
+        },
+      });
+    }
+  }, [loading, userData]);
   return (
     <LayoutWrapper className={`layoutWrapper ${className}`}>
       {(mobile || tablet) && (
@@ -61,6 +81,9 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
         </Sticky>
       )}
       {children}
+      <AddSlideIn>
+        <CompanyForm baseDelay={300} />
+      </AddSlideIn>
     </LayoutWrapper>
   );
 };

@@ -1,5 +1,11 @@
 export default () => [
-
+  {
+    email: 'ichenwu01@gmail.com',
+    password: '$2y$10$lnbuHcLVRF4vzAygIs/wIuUWbziF3i73XMk84MDEqiLQEMcsXHTkO',
+    firstName: 'steven',
+    lastName: 'wu',
+    username: 'stevenwu',
+  },
   {
     email: 'jesschannel@gmail.com',
     firstName: 'Jessica',

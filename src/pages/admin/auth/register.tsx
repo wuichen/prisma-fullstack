@@ -3,14 +3,14 @@ import React, { useContext, useState } from 'react';
 
 import Auth from 'components/Auth';
 import Socials from 'components/Auth/Socials';
-import { useSignupMutation } from 'generated';
+import { useSignUpMutation } from 'generated';
 import { LayoutContext } from 'layouts/Admin';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 export default function Register() {
   const { refetch } = useContext(LayoutContext);
-  const [signup] = useSignupMutation();
+  const [signUp] = useSignUpMutation();
   const router = useRouter();
   const [state, setState] = useState({
     email: '',
@@ -34,14 +34,16 @@ export default function Register() {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signup({
+    signUp({
       variables: {
         email: state.email,
         password: state.password,
         name: state.name,
       },
     }).then(({ data, errors }) => {
-      if (!errors && data?.signup && refetch) {
+      if (!errors && data?.signUp && refetch) {
+        localStorage.setItem('access_token', data?.signUp.token);
+
         refetch().then(() => router.push('/admin'));
       }
     });

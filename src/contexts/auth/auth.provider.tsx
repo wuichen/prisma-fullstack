@@ -4,12 +4,20 @@ const isBrowser = typeof window !== 'undefined';
 const INITIAL_STATE = {
   isAuthenticated: isBrowser && !!localStorage.getItem('access_token'),
   currentForm: 'signIn',
+  me: null,
+  refetch: () => {},
 };
 
 function reducer(state: any, action: any) {
   console.log(state, 'auth');
 
   switch (action.type) {
+    case 'GET_ME':
+      return {
+        ...state,
+        me: action.payload.me,
+        refetch: action.payload.refetch,
+      };
     case 'SIGNIN':
       return {
         ...state,

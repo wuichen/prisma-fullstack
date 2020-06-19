@@ -19,6 +19,8 @@ import localCn from 'data/translation/zh.json';
 import localIl from 'data/translation/he.json';
 
 import { GlobalStyle } from 'styled/global.style';
+import { AddProvider } from 'components/Add/Add.Context';
+import { PlatformProvider } from 'contexts/platform/platform.provider';
 
 // Language translation Config
 const messages = {
@@ -35,18 +37,24 @@ const ShopApp = ({ children, query, locale, deviceType }) => {
     <ThemeProvider theme={theme}>
       <LanguageProvider messages={messages} initLocale={locale}>
         <CartProvider>
-          <SearchProvider query={query}>
-            <HeaderProvider>
-              <StickyProvider>
-                <AuthProvider>
-                  <>
-                    <AppLayout deviceType={deviceType}>{children}</AppLayout>
-                    <GlobalStyle />
-                  </>
-                </AuthProvider>
-              </StickyProvider>
-            </HeaderProvider>
-          </SearchProvider>
+          <PlatformProvider>
+            <AddProvider>
+              <SearchProvider query={query}>
+                <HeaderProvider>
+                  <StickyProvider>
+                    <AuthProvider>
+                      <>
+                        <AppLayout deviceType={deviceType}>
+                          {children}
+                        </AppLayout>
+                        <GlobalStyle />
+                      </>
+                    </AuthProvider>
+                  </StickyProvider>
+                </HeaderProvider>
+              </SearchProvider>
+            </AddProvider>
+          </PlatformProvider>
         </CartProvider>
       </LanguageProvider>
     </ThemeProvider>

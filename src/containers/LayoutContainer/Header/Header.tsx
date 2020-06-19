@@ -11,7 +11,7 @@ import HeaderWrapper from './Header.style';
 import LogoImage from 'image/logo.svg';
 import UserImage from 'image/user.jpg';
 import { isCategoryPage } from '../is-home-page';
-
+import { useLogoutMutation } from 'generated';
 type Props = {
   className?: string;
   token?: string;
@@ -25,11 +25,13 @@ const Header: React.FC<Props> = ({ className }) => {
   } = React.useContext<any>(AuthContext);
   const { state, dispatch } = React.useContext(SearchContext);
   const { pathname, query } = useRouter();
-  const handleLogout = () => {
+  const [logout] = useLogoutMutation();
+  const handleLogout = async () => {
     if (typeof window !== 'undefined') {
+      await logout();
       localStorage.removeItem('access_token');
       authDispatch({ type: 'SIGN_OUT' });
-      Router.push('/');
+      window.location.replace('/');
     }
   };
 

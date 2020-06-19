@@ -1313,7 +1313,7 @@
           "isId": false,
           "unique": false,
           "list": false,
-          "required": true,
+          "required": false,
           "kind": "scalar",
           "relationField": false,
           "title": "Delivery Detail",

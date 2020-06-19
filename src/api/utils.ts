@@ -2,6 +2,7 @@ import { verify } from 'jsonwebtoken'
 import { NextApiRequest } from 'next'
 import cookie from 'cookie'
 import getConfig from 'next/config'
+import { schema } from './graphql/schema/schema'
 
 export const JWT_SECRET = getConfig()?.serverRuntimeConfig.JWT_SECRET ?? null
 
@@ -33,3 +34,4 @@ export function getUserPermissions(request: NextApiRequest) {
     }
   }
 }
+

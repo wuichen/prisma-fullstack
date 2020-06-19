@@ -30,6 +30,7 @@ export default function Login() {
       },
     }).then(({ data, errors }) => {
       if (!errors && data?.login && refetch) {
+        localStorage.setItem('access_token', data?.login.token);
         refetch().then(() => router.push('/admin'));
       }
     });

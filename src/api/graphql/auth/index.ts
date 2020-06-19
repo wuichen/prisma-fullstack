@@ -1,9 +1,19 @@
-import { extendType, stringArg, intArg } from '@nexus/schema'
+import { extendType, stringArg, intArg, objectType } from '@nexus/schema'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from '../../utils'
 import cookie from 'cookie'
 import { UserInputError } from 'apollo-server-micro'
+
+export const AuthPayload = objectType({
+  name: 'AuthPayload',
+  definition(t) {
+    t.string('token')
+    t.field('user', { type: 'User', nullable: true })
+    t.field('company', { type: 'Company', nullable: true })
+    t.field('platform', { type: 'Platform', nullable: true })
+  },
+})
 
 export const AuthQueries = extendType({
   type: 'Query',
@@ -24,11 +34,26 @@ export const AuthQueries = extendType({
   },
 })
 
+export const setHeaderAndSignToken = (res, signatures) => {
+  const token = sign(signatures, JWT_SECRET)
+  res.setHeader(
+    'Set-Cookie',
+    cookie.serialize('token', token, {
+      httpOnly: true,
+      maxAge: 6 * 60 * 60,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    }),
+  )
+  return token
+}
+
 export const AuthMutations = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('signup', {
-      type: 'User',
+    t.field('signUp', {
+      type: AuthPayload,
       args: {
         name: stringArg(),
         email: stringArg({ nullable: false }),
@@ -43,21 +68,14 @@ export const AuthMutations = extendType({
             password: hashedPassword,
           },
         })
-        ctx.res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('token', sign({ userId: user.id }, JWT_SECRET), {
-            httpOnly: true,
-            maxAge: 6 * 60 * 60,
-            path: '/',
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-          }),
-        )
-        return user
+
+        const token = setHeaderAndSignToken(ctx.res, { userId: user.id })
+
+        return { user, token }
       },
     })
     t.field('loginPlatform', {
-      type: 'Platform',
+      type: AuthPayload,
       nullable: true,
       args: {
         platformId: intArg({ nullable: false }),
@@ -78,93 +96,81 @@ export const AuthMutations = extendType({
         } else {
           throw new UserInputError(`No platform found: ${platformId}`)
         }
+        const token = setHeaderAndSignToken(ctx.res, { userId: user.id, permissions })
 
-        res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('token', sign({ userId: userId, permissions }, JWT_SECRET), {
-            httpOnly: true,
-            maxAge: 6 * 60 * 60,
-            path: '/',
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-          }),
-        )
-        return platform
+        return { platform, token }
       },
     })
     t.field('loginCompany', {
-      type: 'Company',
+      type: AuthPayload,
       nullable: true,
       args: {
         companyId: intArg({ nullable: false }),
       },
       resolve: async (_parent, { companyId }, { prisma, userId, res }) => {
-        const staffs = await prisma.staff.findMany({
-          where: {
-            company: {
-              id: companyId,
+        try {
+          const staffs = await prisma.staff.findMany({
+            where: {
+              company: {
+                id: companyId,
+              },
+              user: {
+                id: userId,
+              },
             },
-            user: {
-              id: userId,
+            include: {
+              company: true,
+              user: true,
+              role: true
             },
-          },
-          include: {
-            company: true,
-            user: true,
-          },
-        })
-        let permissions = {}
-        if (staffs && staffs.length && staffs.length > 0) {
-          permissions = { role: staffs[0].role, companyId: staffs[0].company.id }
-        } else {
-          throw new UserInputError(`No company found: ${companyId}`)
-        }
-        const company = staffs.company
+          })
 
-        res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('token', sign({ userId: userId, permissions }, JWT_SECRET), {
-            httpOnly: true,
-            maxAge: 6 * 60 * 60,
-            path: '/',
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-          }),
-        )
-        return company
+          let permissions = {}
+          if (staffs && staffs.length && staffs.length > 0) {
+            permissions = { role: staffs[0].role.name, companyId: staffs[0].company.id }
+          } else {
+            throw new UserInputError(`No company found: ${companyId}`)
+          }
+          const company = staffs[0].company
+          const token = setHeaderAndSignToken(res, { userId, permissions })
+          return { company, token }
+        } catch (err) {
+          console.log(err)
+          throw new Error(err)
+        }
+
       },
     })
     t.field('login', {
-      type: 'User',
+      type: AuthPayload,
       nullable: true,
       args: {
         email: stringArg({ nullable: false }),
         password: stringArg({ nullable: false }),
       },
       resolve: async (_parent, { email, password }, ctx) => {
-        const user = await ctx.prisma.user.findOne({
-          where: {
-            email,
-          },
-        })
-        if (!user) {
-          throw new UserInputError(`No user found for email: ${email}`)
+        try {
+          const user = await ctx.prisma.user.findOne({
+            where: {
+              email,
+            },
+          })
+          console.log(user)
+          if (!user) {
+            throw new UserInputError(`No user found for email: ${email}`)
+          }
+          const passwordValid = await compare(password, user.password)
+          if (!passwordValid) {
+            throw new UserInputError('Invalid password')
+          }
+          const token = setHeaderAndSignToken(ctx.res, { userId: user.id })
+
+          return { user, token }
+        } catch (err) {
+          console.log(err)
+          throw new Error(err)
         }
-        const passwordValid = await compare(password, user.password)
-        if (!passwordValid) {
-          throw new UserInputError('Invalid password')
-        }
-        ctx.res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('token', sign({ userId: user.id }, JWT_SECRET), {
-            httpOnly: true,
-            maxAge: 6 * 60 * 60,
-            path: '/',
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-          }),
-        )
-        return user
+
       },
     })
     t.field('logout', {

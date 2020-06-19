@@ -1,26 +1,29 @@
 import { InputGroup, Checkbox, Button } from 'oah-ui';
 import { Card, CardBody, CardHeader, CardFooter } from 'oah-ui';
-
 import React, { useContext, useState } from 'react';
 import Auth, { Group } from 'components/Auth';
 import Socials from 'components/Auth/Socials';
 import {
-  useLoginMutation,
   useFindManyCompanyQuery,
   useFindManyPlatformQuery,
+  useLoginCompanyMutation,
 } from 'generated';
 import { LayoutContext } from 'layouts/Admin';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Container, Row, Col } from 'oah-ui';
+import SimpleLayout from 'layouts/Admin/SimpleLayout';
+import { useRouter } from 'next/router';
 export default function Login() {
+  // const { toggleAdd } = useContext(AddContext);
+  const [loginCompany] = useLoginCompanyMutation();
   const { me } = useContext(LayoutContext);
+  const router = useRouter();
   const { data: companiesData, loading, error } = useFindManyCompanyQuery({
     variables: {
       where: {
         owner: {
           id: {
-            equals: me.id,
+            equals: me?.id,
           },
         },
       },
@@ -33,7 +36,7 @@ export default function Login() {
       where: {
         owner: {
           id: {
-            equals: me.id,
+            equals: me?.id,
           },
         },
       },
@@ -43,7 +46,6 @@ export default function Login() {
 
   // const [login] = useLoginMutation();
   // const { refetch } = useContext(LayoutContext);
-  const router = useRouter();
   // const [state, setState] = useState({
   //   email: '',
   //   password: '',
@@ -68,12 +70,23 @@ export default function Login() {
   //   });
   // };
 
+  const handleLoginCompany = async (company) => {
+    const { data } = await loginCompany({
+      variables: {
+        companyId: company.id,
+      },
+    });
+    if (data?.loginCompany?.token) {
+      localStorage.setItem('access_token', data.loginCompany.token);
+      router.push('/admin');
+    }
+  };
+
   return (
     <Auth title="Entrance" subTitle="Hello! Please Select a workspace to enter">
+      <SimpleLayout />
       <Container>
-        <h2>
-          My Platforms <Button>Create</Button>
-        </h2>
+        <h2>My Platforms</h2>
 
         <Row>
           {platformsData?.findManyPlatform?.map((platform) => {
@@ -82,14 +95,15 @@ export default function Login() {
                 <Card>
                   <CardHeader>{platform.name}</CardHeader>
                   <CardBody>{platform.description}</CardBody>
+                  <CardFooter>
+                    <Button>Enter</Button>
+                  </CardFooter>
                 </Card>
               </Col>
             );
           })}
         </Row>
-        <h2>
-          My Companies <Button>Create</Button>
-        </h2>
+        <h2>My Companies</h2>
 
         <Row>
           {companiesData?.findManyCompany?.map((company) => {
@@ -98,6 +112,11 @@ export default function Login() {
                 <Card>
                   <CardHeader>{company.name}</CardHeader>
                   <CardBody>{company.description}</CardBody>
+                  <CardFooter>
+                    <Button onClick={() => handleLoginCompany(company)}>
+                      Enter
+                    </Button>
+                  </CardFooter>
                 </Card>
               </Col>
             );
