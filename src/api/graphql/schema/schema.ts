@@ -111,7 +111,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'userId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -209,7 +209,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'userId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -339,6 +339,17 @@ export const schema: SchemaObject = {
           documentation: '',
           relationField: false,
         },
+        {
+          name: 'private',
+          type: 'Boolean',
+          isId: false,
+          unique: false,
+          list: false,
+          required: true,
+          kind: 'scalar',
+          documentation: '',
+          relationField: false,
+        },
       ],
       documentation: '',
     },
@@ -402,7 +413,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'userId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -484,7 +495,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'userId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -716,7 +727,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'ownerId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -761,7 +772,7 @@ export const schema: SchemaObject = {
           isId: false,
           unique: false,
           list: false,
-          required: true,
+          required: false,
           kind: 'scalar',
           documentation: '',
           relationField: false,
@@ -1005,7 +1016,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'ownerId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,
@@ -1119,7 +1130,7 @@ export const schema: SchemaObject = {
       fields: [
         {
           name: 'id',
-          type: 'String',
+          type: 'Int',
           isId: true,
           unique: false,
           list: false,
@@ -1599,7 +1610,7 @@ export const schema: SchemaObject = {
         },
         {
           name: 'userId',
-          type: 'String',
+          type: 'Int',
           isId: false,
           unique: false,
           list: false,

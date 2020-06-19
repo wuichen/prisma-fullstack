@@ -7,6 +7,7 @@ const Query: any = {}
 
 
 const isPrivateModel = (model) => {
+  console.log(model)
   return model.fields.find((field) => {
     return field.name === 'private'
   })

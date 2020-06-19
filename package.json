@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "seed": "ts-node --transpile-only -P nexus.tsconfig.json prisma/seed/seed",
-    "generate": "yarn remove:old && yarn generate:prisma && yarn generate:crud && yarn generate:nexus && yarn generate:admin && yarn generate:graphql",
+    "generate": "yarn remove:old && yarn generate:prisma && yarn generate:schema && yarn generate:crud && yarn generate:nexus && yarn generate:admin && yarn generate:graphql",
     "generate:prisma": "prisma generate",
     "generate:schema": "schema json -o=src/api/graphql/schema",
     "generate:crud": "ts-node --transpile-only -P nexus.tsconfig.json scripts/createCRUD",
