@@ -17,7 +17,7 @@ export const CompanyMenu = [{
   ],
 }, {
   title: 'Sales',
-  icon: { name: 'grid-outline' },
+  icon: { name: 'shopping-cart-outline' },
   children: [
     { title: 'Orders', link: { href: '/admin/models/Order' } },
     {

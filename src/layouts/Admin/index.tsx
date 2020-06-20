@@ -76,10 +76,6 @@ const LayoutPage: React.FC = ({ children }) => {
     }
   }, [router]);
 
-  // const { data: schemaData } = useSWR(print(GetSchemaDocument), (query) =>
-  //   request(process.env.API_URL, query)
-  // );
-
   useEffect(() => {
     if (
       schemaData &&
@@ -109,9 +105,6 @@ const LayoutPage: React.FC = ({ children }) => {
     if (!loading && !userData?.me && !authLayout) {
       router.push('/admin/auth/login');
     }
-    // else if (authLayout && userData?.me && !loading) {
-    //   router.push('/admin');
-    // }
   }, [loading, userData]);
 
   return (
@@ -135,13 +128,14 @@ const LayoutPage: React.FC = ({ children }) => {
               />
             )}
             <LayoutContainer>
-              {!authLayout && adminLayout && menu && menu.length > 0 && (
+              {!authLayout && adminLayout && (
                 <Sidebar
                   ref={sidebarRef}
-                  property="left"
+                  property="start"
                   containerFixed
                   responsive
                   className="menu-sidebar"
+                  compactedBreakpoints={['xs', 'is', 'lg']}
                 >
                   <SidebarBody>
                     <Menu
@@ -149,7 +143,7 @@ const LayoutPage: React.FC = ({ children }) => {
                       className="sidebar-menu"
                       Link={Link}
                       ref={menuRef}
-                      items={menu}
+                      items={menuItems}
                       currentPath={router.pathname}
                       toggleSidebar={() => sidebarRef.current?.hide()}
                     />

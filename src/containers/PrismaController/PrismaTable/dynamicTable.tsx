@@ -7,7 +7,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { TableContext } from './Context';
 import EditRecord from './EditRecord';
 import { mutationDocument, queryDocument } from './QueryDocument';
-
+import jwtDecode from 'jwt-decode';
 interface DynamicTableProps {
   parent?: { name: string; value: any };
   inEdit?: boolean;
@@ -43,11 +43,29 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     initialFilter,
   } = useFilterAndSort(model, inEdit ? filter : query);
 
+  // TODO: find better solution
+  const accessToken =
+    typeof document !== 'undefined'
+      ? localStorage.getItem('access_token')
+      : null;
+  const decode = !!accessToken ? jwtDecode(accessToken) : null;
+  let whereWithCompany = where;
+  if (decode?.permissions?.companyId) {
+    whereWithCompany = {
+      ...where,
+      company: {
+        id: {
+          equals: decode?.permissions?.companyId,
+        },
+      },
+    };
+  }
+
   const [getData, { data, loading, error }] = useLazyQuery(
     queryDocument(models, model),
     {
       variables: {
-        where,
+        where: whereWithCompany,
         orderBy,
         ...page,
       },
