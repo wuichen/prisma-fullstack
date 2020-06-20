@@ -8,8 +8,9 @@ generator client {
 }
 
 model Page {
-  id   Int    @default(autoincrement()) @id
-  slug String @unique
+  id        Int     @default(autoincrement()) @id
+  slug      String  @unique
+  published Boolean @default(true)
 }
 
 model Address {
@@ -105,6 +106,7 @@ model Company {
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
   categories     Category[] @relation(references: [id])
+  published      Boolean    @default(true)
 }
 
 model Coupon {
@@ -144,6 +146,8 @@ model Platform {
   country      Country?   @relation(fields: [countryId], references: [id])
   taxRate      Float
   createdAt    DateTime   @default(now())
+  published    Boolean    @default(false)
+
 }
 
 model User {
@@ -226,6 +230,7 @@ model Category {
   // @onDelete(SET_NULL)
   children   Category[] @relation("Children")
   companies  Company[]
+  published  Boolean    @default(true)
 }
 
 model Product {

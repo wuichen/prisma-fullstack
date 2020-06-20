@@ -44,7 +44,7 @@ export default function Register() {
       if (!errors && data?.signUp && refetch) {
         localStorage.setItem('access_token', data?.signUp.token);
 
-        refetch().then(() => router.push('/admin'));
+        refetch().then(() => router.push('/admin/auth/entrance'));
       }
     });
   };

@@ -1,7 +1,34 @@
 import { MenuItemType } from 'oah-ui';
 
-const items: MenuItemType[] = [
-  { title: 'Home Page', icon: { name: 'home' }, link: { href: '/admin' } },
+export const CompanyMenu = [{
+  title: 'Walkthrough',
+  icon: { name: 'corner-down-right-outline' },
+  link: { href: '/admin/dashboard/walkthrough' }
+},
+{
+  title: 'Catalog',
+  icon: { name: 'grid-outline' },
+  children: [
+    { title: 'Products', link: { href: '/admin/models/Product' } },
+    {
+      title: 'Categories',
+      link: { href: '/admin/models/Category' },
+    },
+  ],
+}, {
+  title: 'Sales',
+  icon: { name: 'grid-outline' },
+  children: [
+    { title: 'Orders', link: { href: '/admin/models/Order' } },
+    {
+      title: 'Invoices',
+      link: { href: '/admin/models/Invoice' },
+    },
+  ],
+}]
+
+const items: MenuItemType[] = [...CompanyMenu,
+{ title: 'Role Settings', icon: { name: 'settings-2-outline' }, link: { href: '/admin/role/settings' } },
   // {
   //   title: 'Models',
   //   icon: { name: 'layers-outline' },

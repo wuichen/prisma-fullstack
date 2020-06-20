@@ -46,7 +46,7 @@ export const LayoutContext: React.Context<ContextProps> = React.createContext(
 );
 
 const LayoutPage: React.FC = ({ children }) => {
-  const [theme, setTheme] = useState<DefaultTheme['name']>('dark');
+  const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const sidebarRef = useRef<SidebarRefObject>(null);
   const menuRef = useRef<MenuRefObject>(null);
   const [menu, setMenu] = useState([]);
@@ -138,7 +138,7 @@ const LayoutPage: React.FC = ({ children }) => {
               {!authLayout && adminLayout && menu && menu.length > 0 && (
                 <Sidebar
                   ref={sidebarRef}
-                  property="start"
+                  property="left"
                   containerFixed
                   responsive
                   className="menu-sidebar"

@@ -78,7 +78,7 @@ export default function Login() {
     });
     if (data?.loginCompany?.token) {
       localStorage.setItem('access_token', data.loginCompany.token);
-      router.push('/admin');
+      router.push('/admin/role/settings');
     }
   };
 

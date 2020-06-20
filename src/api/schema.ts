@@ -4,7 +4,6 @@ import { prismaSelectObject } from 'nexus-schema-plugin-prisma-select'
 import { join } from 'path'
 import { applyMiddleware } from 'graphql-middleware'
 import permissions from './middleware/permissions'
-import generateData from './middleware/generateData'
 
 
 export const schema = applyMiddleware(makeSchema({
@@ -27,4 +26,4 @@ export const schema = applyMiddleware(makeSchema({
     ],
     contextType: 'Context.Context',
   },
-}), generateData)
+}), permissions)
