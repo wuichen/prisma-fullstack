@@ -23,38 +23,39 @@ import NoResultFound from 'components/NoResult/NoResult';
 const QuickView = dynamic(() => import('../QuickView/QuickView'));
 
 const GET_PRODUCTS = gql`
-  query findManyProduct(
+  query getProducts(
     $type: String
     $text: String
     $category: String
     $offset: Int
     $limit: Int
   ) {
-    findManyProduct(
-      where: {
-        name: { contains: $text }
-        categories: { some: { slug: { equals: $category } } }
-        type: { equals: $type }
-      }
-      take: $limit
-      skip: $offset
+    products(
+      type: $type
+      text: $text
+      category: $category
+      offset: $offset
+      limit: $limit
     ) {
-      id
-      name
-      slug
-      unit
-      price
-      salePrice
-      description
-      discountInPercent
-      type
-      image
-      gallery
-      categories {
+      items {
         id
         name
         slug
+        unit
+        price
+        salePrice
+        description
+        discountInPercent
+        type
+        image
+        gallery
+        categories {
+          id
+          name
+          slug
+        }
       }
+      hasMore
     }
   }
 `;
@@ -75,7 +76,6 @@ export const Products: React.FC<ProductsProps> = ({
   fetchLimit = 8,
   loadMore = true,
 }) => {
-  const [hasMore, setHasMore] = useState(true);
   const router = useRouter();
   const [loadingMore, toggleLoading] = useState(false);
   const { data, error, loading, fetchMore } = useQuery(GET_PRODUCTS, {
@@ -147,27 +147,27 @@ export const Products: React.FC<ProductsProps> = ({
   }
 
   if (error) return <div>{error.message}</div>;
-  if (!data || !data.findManyProduct || data.findManyProduct.length === 0) {
+  if (!data || !data.products || data.products.items.length === 0) {
     return <NoResultFound />;
   }
   const handleLoadMore = () => {
     toggleLoading(true);
     fetchMore({
       variables: {
-        offset: Number(data.findManyProduct.length),
+        offset: Number(data.products.items.length),
         limit: fetchLimit,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         toggleLoading(false);
         if (!fetchMoreResult) {
-          setHasMore(false);
           return prev;
         }
         return {
-          findManyProduct: [
-            ...prev.findManyProduct,
-            ...fetchMoreResult.findManyProduct,
-          ],
+          products: {
+            __typename: prev.products.__typename,
+            items: [...prev.products.items, ...fetchMoreResult.products.items],
+            hasMore: fetchMoreResult.products.hasMore,
+          },
         };
       },
     });
@@ -176,7 +176,7 @@ export const Products: React.FC<ProductsProps> = ({
   return (
     <>
       <ProductsRow>
-        {data.findManyProduct.map((item: any, index: number) => (
+        {data.products.items.map((item: any, index: number) => (
           <ProductsCol key={index}>
             <ProductCardWrapper>
               <Fade
@@ -185,7 +185,7 @@ export const Products: React.FC<ProductsProps> = ({
                 style={{ height: '100%' }}
               >
                 <ProductCard
-                  title={item.name}
+                  name={item.name}
                   description={item.description}
                   image={item.image}
                   weight={item.unit}
@@ -204,7 +204,7 @@ export const Products: React.FC<ProductsProps> = ({
           </ProductsCol>
         ))}
       </ProductsRow>
-      {loadMore && hasMore && (
+      {loadMore && data.products.hasMore && (
         <ButtonWrapper>
           <Button
             onClick={handleLoadMore}

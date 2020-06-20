@@ -146,7 +146,7 @@ IndexPage.getInitialProps = async (ctx: any) => {
 
   if (host) {
     if (host.includes('localhost')) {
-      return { sub: 'furniture' };
+      return { sub: 'grocery' };
     }
     sub = host.split('mercy-app')[0];
     if (sub) {

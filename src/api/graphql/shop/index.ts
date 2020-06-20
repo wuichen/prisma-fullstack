@@ -105,59 +105,59 @@ const ProductResponse = objectType({
 export const Query = extendType({
   type: 'Query',
   definition(t) {
-    // t.field('products', {
-    //   type: ProductResponse,
-    //   args: {
-    //     category: stringArg(),
-    //     text: stringArg(),
-    //     type: stringArg(),
-    //     offset: intArg({ default: 0 }),
-    //     limit: intArg({ default: 10 }),
-    //   },
-    //   resolve: async (_, { category, text, type, offset, limit }, { prisma, user }) => {
-    //     const where: ProductWhereInput = {}
-    //     if (type) {
-    //       where.type = {
-    //         equals: type,
-    //       }
-    //     }
-    //     if (category) {
-    //       where.categories = {
-    //         some: {
-    //           slug: {
-    //             startsWith: category,
-    //           },
-    //         },
-    //       }
-    //     }
+    t.field('products', {
+      type: ProductResponse,
+      args: {
+        category: stringArg(),
+        text: stringArg(),
+        type: stringArg(),
+        offset: intArg({ default: 0 }),
+        limit: intArg({ default: 10 }),
+      },
+      resolve: async (_, { category, text, type, offset, limit }, { prisma, user }) => {
+        const where: ProductWhereInput = {}
+        if (type) {
+          where.type = {
+            equals: type,
+          }
+        }
+        if (category) {
+          where.categories = {
+            some: {
+              slug: {
+                startsWith: category,
+              },
+            },
+          }
+        }
 
-    //     if (text) {
-    //       where.name = {
-    //         contains: text,
-    //       }
-    //     }
-    //     const products = await prisma.product.findMany({
-    //       where,
-    //       include: {
-    //         categories: true,
-    //       },
-    //       take: limit,
-    //       skip: offset,
-    //     })
-    //     const count = await prisma.product.count({
-    //       where: {
-    //         type: {
-    //           equals: type,
-    //         },
-    //       },
-    //     })
-    //     return {
-    //       items: products,
-    //       total: count,
-    //       hasMore: limit + offset > count ? false : true,
-    //     }
-    //   },
-    // })
+        if (text) {
+          where.name = {
+            contains: text,
+          }
+        }
+        const products = await prisma.product.findMany({
+          where,
+          include: {
+            categories: true,
+          },
+          take: limit,
+          skip: offset,
+        })
+        const count = await prisma.product.count({
+          where: {
+            type: {
+              equals: type,
+            },
+          },
+        })
+        return {
+          items: products,
+          total: count,
+          hasMore: limit + offset > count ? false : true,
+        }
+      },
+    })
     // t.field('product', {
     //   type: Product,
     //   args: {
