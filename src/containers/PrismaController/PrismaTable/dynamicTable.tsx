@@ -34,7 +34,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     query,
   } = useContext(TableContext);
   const modelObject = models.find((item) => item.id === model);
-  console.log(models);
+  console.log(modelObject);
   const {
     where,
     orderBy,
@@ -43,14 +43,19 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     initialFilter,
   } = useFilterAndSort(model, inEdit ? filter : query);
 
-  // TODO: find better solution
+  // TODO: find a better solution to generate company id in query
   const accessToken =
     typeof document !== 'undefined'
       ? localStorage.getItem('access_token')
       : null;
   const decode = !!accessToken ? jwtDecode(accessToken) : null;
   let whereWithCompany = where;
-  if (decode?.permissions?.companyId) {
+  let hasCompanyModel = modelObject?.fields
+    ? modelObject.fields.find((field) => {
+        return field.name === 'company';
+      })
+    : null;
+  if (hasCompanyModel && decode?.permissions?.companyId) {
     whereWithCompany = {
       ...where,
       company: {

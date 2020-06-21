@@ -31,8 +31,8 @@ fragment Model on Model {
   }
 }
 
-query getSchema {
-  getSchema {
+query getSchema($name: String) {
+  getSchema(name: $name) {
     models {
       ...Model
     }

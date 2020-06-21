@@ -92,7 +92,7 @@ export const AuthMutations = extendType({
         let permissions = {}
 
         if (platform && platform.user && platform.user.id) {
-          permissions = { role: 'admin', platformId: platform.id }
+          permissions = { role: 'PLATFORM_ADMIN', platformId: platform.id }
         } else {
           throw new UserInputError(`No platform found: ${platformId}`)
         }

@@ -39,8 +39,8 @@ const modelFragment = gql`
 `;
 
 export const GET_SCHEMA = gql`
-  query getSchema {
-    getSchema {
+  query getSchema($name: String) {
+    getSchema(name: $name) {
       models {
         ...Model
       }

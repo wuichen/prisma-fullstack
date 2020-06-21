@@ -20,8 +20,11 @@ export function adminNexusSettings(path = 'prisma/schema.json') {
       definition(t) {
         t.field('getSchema', {
           type: 'Schema',
-          resolve: async (_parent, { }, { prisma }) => {
-            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+          args: {
+            name: stringArg({ nullable: true }),
+          },
+          resolve: async (_parent, { name }, { prisma }) => {
+            const adapter = new RoleSchemaAdapter({ prisma, name: name ? name : 'DEFAULT_UI' })
             const db = await low(adapter);
             return db.value();
           },
@@ -38,7 +41,7 @@ export function adminNexusSettings(path = 'prisma/schema.json') {
             data: 'UpdateModelInput',
           },
           resolve: async (_, { id, data }, { prisma }) => {
-            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+            const adapter = new RoleSchemaAdapter({ prisma, name: 'DEFAULT_UI' })
             const db = await low(adapter);
             return db.get('models').find({ id }).assign(data).write();
           },
@@ -51,7 +54,7 @@ export function adminNexusSettings(path = 'prisma/schema.json') {
             data: 'UpdateFieldInput',
           },
           resolve: async (_, { id, modelId, data }, { prisma }) => {
-            const adapter = new RoleSchemaAdapter({ prisma, name: 'admin' })
+            const adapter = new RoleSchemaAdapter({ prisma, name: 'DEFAULT_UI' })
             const db = await low(adapter);
             return db
               .get('models')

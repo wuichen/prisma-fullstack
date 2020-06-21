@@ -21,6 +21,12 @@ const isCompanyModel = (model) => {
   })
 }
 
+const isOwnerModel = (model) => {
+  return model.fields.find((field) => {
+    return field.name === 'owner'
+  })
+}
+
 const isAuthUserInWhere = (args, userId) => {
   return (args.where?.user?.id?.equals === userId || args.where?.owner?.id?.equals === userId)
 }
@@ -44,7 +50,15 @@ const findManyAction = (model) => async (resolve, parent, args, context, info) =
       }
     }
   } else if (isPublishableModel(model)) {
-    if (isCompanyModel(model) && isAuthCompanyInWhere(args, permissions)) {
+    if (isOwnerModel(model) && isAuthUserInWhere(args, permissions)) {
+      argsWithDefault = {
+        ...argsWithDefault,
+        where: {
+          ...argsWithDefault.where,
+          OR: [{ published: true }, { owner: { id: { equals: userId } } }]
+        }
+      }
+    } else if (isCompanyModel(model) && isAuthCompanyInWhere(args, permissions)) {
       argsWithDefault = {
         ...argsWithDefault,
         where: {

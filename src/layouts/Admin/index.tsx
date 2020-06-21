@@ -49,7 +49,7 @@ const LayoutPage: React.FC = ({ children }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const sidebarRef = useRef<SidebarRefObject>(null);
   const menuRef = useRef<MenuRefObject>(null);
-  const [menu, setMenu] = useState([]);
+  // const [menu, setMenu] = useState([]);
   const { data: userData, loading, refetch } = useMeQuery();
   const router = useRouter();
 
@@ -59,7 +59,7 @@ const LayoutPage: React.FC = ({ children }) => {
 
   const authLayout = router.pathname.startsWith('/admin/auth');
   const adminLayout = router.pathname.startsWith('/admin');
-  const { data: schemaData } = useGetSchemaQuery();
+  // const { data: schemaData } = useGetSchemaQuery();
 
   useEffect(() => {
     if (router.pathname) {
@@ -76,30 +76,30 @@ const LayoutPage: React.FC = ({ children }) => {
     }
   }, [router]);
 
-  useEffect(() => {
-    if (
-      schemaData &&
-      schemaData.getSchema &&
-      schemaData.getSchema.models &&
-      schemaData.getSchema.models.length > 0
-    ) {
-      setMenu([
-        ...menuItems,
-        {
-          title: 'Models',
-          icon: { name: 'layers-outline' },
-          children: schemaData.getSchema.models.map((model) => {
-            return {
-              title: model.name,
-              link: {
-                href: `/admin/models/${model.name}`,
-              },
-            };
-          }),
-        },
-      ]);
-    }
-  }, [schemaData]);
+  // useEffect(() => {
+  //   if (
+  //     schemaData &&
+  //     schemaData.getSchema &&
+  //     schemaData.getSchema.models &&
+  //     schemaData.getSchema.models.length > 0
+  //   ) {
+  //     setMenu([
+  //       ...menuItems,
+  //       {
+  //         title: 'Models',
+  //         icon: { name: 'layers-outline' },
+  //         children: schemaData.getSchema.models.map((model) => {
+  //           return {
+  //             title: model.name,
+  //             link: {
+  //               href: `/admin/models/${model.name}`,
+  //             },
+  //           };
+  //         }),
+  //       },
+  //     ]);
+  //   }
+  // }, [schemaData]);
 
   useEffect(() => {
     if (!loading && !userData?.me && !authLayout) {

@@ -28,6 +28,17 @@ export const schema: SchemaObject = {
           relationField: false,
         },
         {
+          name: 'name',
+          type: 'String',
+          isId: false,
+          unique: false,
+          list: false,
+          required: false,
+          kind: 'scalar',
+          documentation: '',
+          relationField: false,
+        },
+        {
           name: 'published',
           type: 'Boolean',
           isId: false,

@@ -9,7 +9,7 @@ export default (db, { serializeDate }) =>
     const hasOrdered = weightedBoolean(25);
     const firstName = name.firstName();
     const lastName = name.lastName();
-    const email = internet.email(firstName, lastName);
+    const email = internet.email(firstName, lastName, Math.floor(Math.random() * 100).toString());
     const birthday = hasOrdered ? date.past(60) : null;
     return {
       firstName,

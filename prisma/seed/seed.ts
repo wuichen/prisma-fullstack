@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, raw } from '@prisma/client';
 import dataGenerator from './index';
 import { Categories } from 'containers/ProductDetailsFood/ProductDetailsFood.style';
 import { randomDate, randomFloat, weightedArrayElement, weightedBoolean } from './utils';
@@ -24,13 +24,74 @@ const db = {
 };
 const prisma = new PrismaClient();
 const rawData = fs.readFileSync(path.join(__dirname, '../schema.json'));
-const schemaString = JSON.stringify(JSON.parse(rawData))
+
+const generateDefaultUI = (modifiedData) => {
+  for (let y = 0; y < modifiedData.models.length; y++) {
+    let model = modifiedData.models[y];
+
+    // this is to change display from id to name or firstname/lastname
+    let displayFields = []
+    if (model.fields.find((field) => field.name === 'name')) {
+      displayFields = ['name']
+    } else if (model.fields.find((field) => field.name === 'firstName')) {
+      displayFields.unshift('firstName')
+    } else if (model.fields.find((field) => field.name === 'lastName')) {
+      displayFields.push('lastName')
+    } else {
+      displayFields = ['id']
+    }
+
+    model.displayFields = displayFields
+
+    // this is for hiding id columns in front end
+    for (let z = 0; z < model.fields.length; z++) {
+      let field = model.fields[z];
+      if (field.name != 'id' && field.name.endsWith('Id')) {
+        field.read = false
+      }
+    }
+  }
+  return modifiedData
+}
+
+const generateCompanyUI = (modifiedData) => {
+  for (let y = 0; y < modifiedData.models.length; y++) {
+    let model = modifiedData.models[y];
+    // this is for hiding id columns in front end
+    for (let z = 0; z < model.fields.length; z++) {
+      let field = model.fields[z];
+      if (field.name === 'company') {
+        field.read = false
+      }
+    }
+  }
+  return modifiedData
+}
+
 async function seedData() {
   await prisma.connect();
 
   if (data.roles) {
     for (let index = 0; index < data.roles.length; index++) {
       const element = data.roles[index];
+      let modifiedData = JSON.parse(rawData)
+      let schemaString
+      switch (element.name) {
+        case 'DEFAULT_SCHEMA':
+          schemaString = JSON.stringify(modifiedData)
+          break;
+        case 'COMPANY_ADMIN':
+          modifiedData = generateDefaultUI(modifiedData)
+          modifiedData = generateCompanyUI(modifiedData)
+          schemaString = JSON.stringify(modifiedData)
+          console.log(schemaString)
+          break;
+        default:
+          modifiedData = generateDefaultUI(modifiedData)
+          schemaString = JSON.stringify(modifiedData)
+          break;
+      }
+
       element.schema = schemaString
       const role = await prisma.role.create({
         data: element,
@@ -155,7 +216,7 @@ async function seedData() {
       for (let j = 0; j < element.categories.length; j++) {
         const category = element.categories[j];
         const existItem = db.categories.find((existCategory) => {
-          console.log(existCategory.slug, category)
+          // console.log(existCategory.slug, category)
           return existCategory.slug.includes(category)
         });
         if (existItem) {
@@ -199,7 +260,7 @@ async function seedData() {
               {
                 role: {
                   connect: {
-                    name: 'admin',
+                    name: 'COMPANY_ADMIN',
                   },
                 },
                 user: {
@@ -557,7 +618,7 @@ const createOrConnectCompany = (product) => {
               },
               role: {
                 connect: {
-                  name: 'admin'
+                  name: 'COMPANY_ADMIN'
                 }
               }
             }]

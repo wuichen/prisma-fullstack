@@ -48,6 +48,25 @@
           "order": -1
         },
         {
+          "id": "Page.name",
+          "name": "name",
+          "type": "String",
+          "isId": false,
+          "unique": false,
+          "list": false,
+          "required": false,
+          "kind": "scalar",
+          "relationField": false,
+          "title": "Name",
+          "create": true,
+          "update": true,
+          "editor": false,
+          "read": true,
+          "filter": true,
+          "sort": true,
+          "order": -1
+        },
+        {
           "id": "Page.published",
           "name": "published",
           "type": "Boolean",

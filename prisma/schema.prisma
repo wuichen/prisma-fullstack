@@ -10,6 +10,7 @@ generator client {
 model Page {
   id        Int     @default(autoincrement()) @id
   slug      String  @unique
+  name      String?
   published Boolean @default(true)
 }
 
