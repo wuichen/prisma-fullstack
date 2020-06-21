@@ -7,7 +7,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { TableContext } from './Context';
 import EditRecord from './EditRecord';
 import { mutationDocument, queryDocument } from './QueryDocument';
-import jwtDecode from 'jwt-decode';
+import decodeAccessToken from 'helper/decodeAccessToken';
 interface DynamicTableProps {
   parent?: { name: string; value: any };
   inEdit?: boolean;
@@ -43,12 +43,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     initialFilter,
   } = useFilterAndSort(model, inEdit ? filter : query);
 
-  // TODO: find a better solution to generate company id in query
-  const accessToken =
-    typeof document !== 'undefined'
-      ? localStorage.getItem('access_token')
-      : null;
-  const decode = !!accessToken ? jwtDecode(accessToken) : null;
+  const decode = decodeAccessToken();
   let whereWithCompany = where;
   let hasCompanyModel = modelObject?.fields
     ? modelObject.fields.find((field) => {

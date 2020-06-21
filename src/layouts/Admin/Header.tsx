@@ -1,11 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled, { DefaultTheme } from 'styled-components';
-import { Actions, Select, LayoutHeader, User, breakpointDown, EvaIcon } from 'oah-ui';
+import {
+  Actions,
+  Select,
+  LayoutHeader,
+  User,
+  breakpointDown,
+  EvaIcon,
+} from 'oah-ui';
 import { LayoutContext } from './index';
 import { useApolloClient } from '@apollo/client';
 import { useLogoutMutation } from 'generated';
-
+import decodeAccessToken from 'helper/decodeAccessToken';
 const HeaderStyle = styled.div`
   display: flex;
   width: 100%;
@@ -44,6 +51,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = (props) => {
   const { me, refetch } = useContext(LayoutContext);
+  const [title, setTitle] = useState('');
   const [logoutMutation] = useLogoutMutation();
   const client = useApolloClient();
 
@@ -52,6 +60,20 @@ const Header: React.FC<HeaderProps> = (props) => {
     await client.clearStore();
     refetch && (await refetch());
   };
+
+  useEffect(() => {
+    const decode = decodeAccessToken();
+    if (decode.permissions.role) {
+      const role = decode.permissions.role;
+      switch (role) {
+        case 'COMPANY_ADMIN':
+          setTitle('Admin');
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   const themeOptions = [
     {
@@ -106,8 +128,8 @@ const Header: React.FC<HeaderProps> = (props) => {
             },
             {
               content: (
-                <Link href="/admin">
-                  <a className="logo">Prisma Admin</a>
+                <Link href="/admin/auth/entrance">
+                  <a className="logo">Mercy</a>
                 </Link>
               ),
             },
@@ -117,9 +139,13 @@ const Header: React.FC<HeaderProps> = (props) => {
                   isSearchable={false}
                   shape="SemiRound"
                   placeholder="Themes"
-                  value={themeOptions.find((item) => item.value === props.theme)}
+                  value={themeOptions.find(
+                    (item) => item.value === props.theme
+                  )}
                   options={themeOptions}
-                  onChange={({ value }: { value: DefaultTheme['name'] }) => props.changeTheme(value)}
+                  onChange={({ value }: { value: DefaultTheme['name'] }) =>
+                    props.changeTheme(value)
+                  }
                 />
               ),
             },
@@ -129,19 +155,27 @@ const Header: React.FC<HeaderProps> = (props) => {
           size="Small"
           className="right"
           actions={[
+            // {
+            //   icon: 'github',
+            //   url: {
+            //     href: 'https://github.com/AhmedElywa/prisma-admin',
+            //     target: '_blank',
+            //   },
+            // },
+            // {
+            //   icon: 'twitter',
+            //   url: { href: 'https://twitter.com/AhmedElywh', target: '_blank' },
+            // },
             {
-              icon: 'github',
-              url: { href: 'https://github.com/AhmedElywa/prisma-admin', target: '_blank' },
+              content: me && (
+                <User name={me.username!} title={title} size="Medium" />
+              ),
             },
             {
-              icon: 'twitter',
-              url: { href: 'https://twitter.com/AhmedElywh', target: '_blank' },
-            },
-            {
-              content: me && <User name={me.name!} title="Manager" size="Medium" />,
-            },
-            {
-              icon: { name: 'log-out-outline', options: { animation: { type: 'zoom' } } },
+              icon: {
+                name: 'log-out-outline',
+                options: { animation: { type: 'zoom' } },
+              },
               url: {
                 onClick: logout,
                 title: 'Log out',

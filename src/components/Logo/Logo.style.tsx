@@ -16,5 +16,5 @@ export const LogoBox = styled.span(
 export const LogoImage = styled.img({
   display: 'block',
   backfaceVisibility: 'hidden',
-  maxWidth: 150,
+  maxWidth: 50,
 });

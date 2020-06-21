@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { GET_SCHEMA } from '../SchemaQueries';
 import { ModelTableProps, ContextProps } from '..';
 import { TableContext, defaultSettings } from './Context';
-import jwtDecode from 'jwt-decode';
+import decodeAccessToken from 'helper/decodeAccessToken';
 
 const PrismaTable: React.FC<ModelTableProps> = (props) => {
   const [role, setRole] = useState(null);
@@ -18,8 +18,7 @@ const PrismaTable: React.FC<ModelTableProps> = (props) => {
   });
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    const decode = !!accessToken ? jwtDecode(accessToken) : null;
+    const decode = decodeAccessToken();
 
     if (decode?.permissions?.role) {
       setRole(decode.permissions.role);
