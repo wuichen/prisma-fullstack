@@ -13,10 +13,12 @@ import 'rc-table/assets/index.css';
 import 'rc-collapse/assets/index.css';
 import 'react-multi-carousel/lib/styles.css';
 import 'components/MultiCarousel/MultiCarousel.style.css';
+import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@redq/reuse-modal/lib/index.css';
 import 'react-quill/dist/quill.snow.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useDeviceType } from 'helper/useDeviceType';
+import 'styles/app.css';
 
 const MyApp: NextPage<AppProps> = ({ Component, pageProps, router }) => {
   let userAgent;
@@ -46,6 +48,10 @@ const MyApp: NextPage<AppProps> = ({ Component, pageProps, router }) => {
         <Layout>
           <Component deviceType={deviceType} {...pageProps} />
         </Layout>
+      ) : pathname.includes('/design') ? (
+        <>
+          <Component deviceType={deviceType} {...pageProps} />
+        </>
       ) : (
         <Shop locale={locale} deviceType={deviceType} query={router.query}>
           <Component deviceType={deviceType} {...pageProps} />
