@@ -16,6 +16,9 @@ import 'components/MultiCarousel/MultiCarousel.style.css';
 import '@redq/reuse-modal/lib/index.css';
 import 'react-quill/dist/quill.snow.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import '@glidejs/glide/dist/css/glide.core.min.css';
+import '@lourenci/react-kanban/dist/styles.css';
+
 import { useDeviceType } from 'helper/useDeviceType';
 
 const MyApp: NextPage<AppProps> = ({ Component, pageProps, router }) => {
@@ -46,6 +49,10 @@ const MyApp: NextPage<AppProps> = ({ Component, pageProps, router }) => {
         <Layout>
           <Component deviceType={deviceType} {...pageProps} />
         </Layout>
+      ) : pathname.includes('/design') ? (
+        <>
+          <Component deviceType={deviceType} {...pageProps} />
+        </>
       ) : (
         <Shop locale={locale} deviceType={deviceType} query={router.query}>
           <Component deviceType={deviceType} {...pageProps} />
