@@ -19,6 +19,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@lourenci/react-kanban/dist/styles.css';
 
+import 'theme/main.css';
+
 import { useDeviceType } from 'helper/useDeviceType';
 
 const MyApp: NextPage<AppProps> = ({ Component, pageProps, router }) => {

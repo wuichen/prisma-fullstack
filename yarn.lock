@@ -1715,13 +1715,6 @@
     "@graphql-tools/utils" "6.0.9"
     tslib "~2.0.0"
 
-"@lourenci/react-kanban@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@lourenci/react-kanban/-/react-kanban-2.0.0.tgz#1acc8d83f5d9eaa2e2fa0c227229dd687cd3983c"
-  integrity sha512-ieNi7d/01wgT9t8kN7Z/RBubyZq9VvKXyU/5sj+UlrY8h4GPRNrN11jLV/ykg55lhyXGKgXDk3ObYurOfrmu3w==
-  dependencies:
-    react-beautiful-dnd "^13.0.0"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

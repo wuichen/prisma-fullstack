@@ -14,7 +14,7 @@ import { Topbar } from 'editor/Topbar';
 
 export default function App() {
   return (
-    <div style={{ margin: '0 auto', width: '800px' }}>
+    <div style={{ margin: '0 auto', width: '100%' }}>
       <h1>Basic Page Editor</h1>
       <Editor
         resolver={{

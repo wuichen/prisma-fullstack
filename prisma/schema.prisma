@@ -8,10 +8,23 @@ generator client {
 }
 
 model Page {
-  id        Int     @default(autoincrement()) @id
-  slug      String  @unique
+  id        Int      @default(autoincrement()) @id
+  slug      String   @unique
   name      String?
-  published Boolean @default(true)
+  published Boolean  @default(true)
+  website   Website? @relation(fields: [websiteId], references: [id])
+  websiteId Int?
+}
+
+model Website {
+  id          Int       @default(autoincrement()) @id
+  companyId   Int?
+  company     Company?  @relation(fields: [companyId], references: [id])
+  platformId  Int?
+  platform    Platform? @relation(fields: [platformId], references: [id])
+  pages       Page[]
+  name        String
+  description String
 }
 
 model Address {
@@ -52,6 +65,7 @@ model Staff {
   private   Boolean  @default(true)
 }
 
+// @onDelete(SET_NULL)
 model Card {
   id            Int    @default(autoincrement()) @id
   type          String
@@ -62,6 +76,7 @@ model Card {
   user          User?  @relation(fields: [userId], references: [id])
 }
 
+// documentation
 model Contact {
   id        Int      @default(autoincrement()) @id
   type      String?
@@ -108,6 +123,7 @@ model Company {
   updatedAt      DateTime   @updatedAt
   categories     Category[] @relation(references: [id])
   published      Boolean    @default(true)
+  Website        Website[]
 }
 
 model Coupon {
@@ -149,6 +165,7 @@ model Platform {
   createdAt    DateTime   @default(now())
   published    Boolean    @default(false)
 
+  Website Website[]
 }
 
 model User {

@@ -45,7 +45,7 @@ export const ContainerSettings = () => {
 
 export const ContainerDefaultProps = {
   background: '#ffffff',
-  padding: 3,
+  padding: 0,
 };
 
 Container.craft = {

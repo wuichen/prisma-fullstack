@@ -131,6 +131,7 @@ const LayoutPage: React.FC = ({ children }) => {
               {!authLayout && adminLayout && (
                 <Sidebar
                   ref={sidebarRef}
+                  state="visible"
                   property="start"
                   containerFixed
                   responsive
